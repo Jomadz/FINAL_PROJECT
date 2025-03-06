@@ -10,7 +10,8 @@ use App\Http\Controllers\ProfileImageController;
 
 // Show the profile image upload form
 Route::get('/profile', [ProfileImageController::class, 'showForm'])->name('profile.show');
-
+// Route to handle the profile image update
+Route::post('/profile/update', [ProfileImageController::class, 'update'])->name('profile.update');
 // Handle the profile image upload
 Route::post('/profile/upload', [ProfileImageController::class, 'upload'])->name('profile.upload');
 
