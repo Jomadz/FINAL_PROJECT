@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        return view('admin.dashboard'); // Make sure this view exists
+        // Retrieve the authenticated user
+        $user = Auth::user(); // Get the currently authenticated user
+
+        // Pass the user data to the view
+        return view('admin.dashboard', compact('user')); // Ensure this view exists
     } 
 }

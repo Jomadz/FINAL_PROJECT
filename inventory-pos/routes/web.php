@@ -6,6 +6,13 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileImageController;
+
+// Show the profile image upload form
+Route::get('/profile', [ProfileImageController::class, 'showForm'])->name('profile.show');
+
+// Handle the profile image upload
+Route::post('/profile/upload', [ProfileImageController::class, 'upload'])->name('profile.upload');
 
 Route::middleware(['auth'])->group(function () {
     // Route for the profile edit page

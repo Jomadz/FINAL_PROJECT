@@ -127,23 +127,24 @@
             <li class="nav-item dropdown user-menu">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                 <img
-                  src="{{ asset('img/admin.jpeg')}}"
+                  src="{{ $user->profile_image ?? asset ('admin.jpeg') }}"
                   class="user-image rounded-circle shadow"
                   alt="User Image"
                 />
-                <span class="d-none d-md-inline">Madulu Mtei</span>
+                <span class="d-none d-md-inline">{{ $user->name }}</span>
+                
               </a>
               <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                 <!--begin::User Image-->
                 <li class="user-header text-bg-primary">
                   <img
-                    src="{{ asset('img/admin.jpeg')}}"
+                    src="{{ $user->profile_image ?? asset('default-profile.png')}}"
                     class="rounded-circle shadow"
                     alt="User Image"
                   />
                   <p>
-                    Madulu Mtei - small business woman
-                    <small>Member since Jan. 2025</small>
+                  {{ $user->name }} - {{ $user->role }} 
+                  <small>Member since {{ $user->created_at? $user->created_at->format('M Y') : 'N/A' }}</small>
                   </p>
                 </li>
                 <!--end::User Image-->
@@ -271,6 +272,10 @@
                       </li>
               
                       <!-- seller -->
+
+                      @if(auth()->user()->role === 'admin')
+
+
                       <li class="nav-item">
                         <a href="#" class="nav-link">
                           <i class="nav-icon bi bi-people-fill"></i>
@@ -296,7 +301,8 @@
                       </li>
                      </ul>
                    </li>
-              
+                   @endif
+
                       <!-- Revenue -->
                       <li class="nav-item">
                         <a href="#" class="nav-link">

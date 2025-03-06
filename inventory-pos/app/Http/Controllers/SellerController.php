@@ -14,7 +14,7 @@ class SellerController extends Controller
         // Check if the authenticated user is an admin
         if (Auth::user()->role !== 'admin') {
             // Redirect to admin dashboard if not an admin
-            return redirect()->route('admin.dashboard')->withErrors('You are not authorized to create sellers.');
+            return redirect()->route('dashboard')->withErrors('You are not authorized to create sellers.');
         }
 
         // Check if there are already 4 sellers
@@ -22,7 +22,7 @@ class SellerController extends Controller
 
         if ($sellerCount >= 4) {
             // Redirect to admin dashboard if there are already 4 sellers
-            return redirect()->route('admin.dashboard')->withErrors('You can only create up to 4 sellers.');
+            return redirect()->route('dashboard')->withErrors('You can only create up to 4 sellers.');
         }
 
         // Proceed to the seller creation form
@@ -48,6 +48,16 @@ class SellerController extends Controller
         ]);
 
         // Redirect to the admin dashboard after creating the seller
-        return redirect()->route('admin.dashboard')->with('success', 'Seller created successfully.');
+        return redirect()->route('dashboard')->with('success', 'Seller created successfully.');
+    }
+
+    // Show the admin dashboard (same view for admin and seller)
+    public function dashboard()
+    {
+        // Get the authenticated user's role
+        $userRole = Auth::user()->role;
+
+        // Return the admin.dashboard view with the user's role
+        return view('admin.dashboard', compact('user','userRole'));
     }
 }
