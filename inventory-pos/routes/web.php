@@ -8,17 +8,24 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileImageController;
 
-// Show the profile image upload form
-Route::get('/profile', [ProfileImageController::class, 'showForm'])->name('profile.show');
-// Route to handle the profile image update
-Route::post('/profile/update', [ProfileImageController::class, 'update'])->name('profile.update');
-// Handle the profile image upload
-Route::post('/profile/upload', [ProfileImageController::class, 'upload'])->name('profile.upload');
+// Group profile routes under auth middleware
+Route::middleware(['auth'])->group(function () {
+    // Show profile information & image upload form
+    Route::get('/profile', [ProfileController::class, 'showForm'])->name('profile.show');
+
+    // Handle profile updates (like name, email)
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+
+     // Handle profile updates (like name, email)
+     Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+});
 
 Route::middleware(['auth'])->group(function () {
-    // Route for the profile edit page
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/image/update', [ProfileImageController::class, 'update'])->name('profile.image.update');
 });
+
+
+
 
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class ProfileImageController extends Controller
 {
-    public function updateProfile(Request $request)
+    public function update(Request $request)
 {
     $request->validate([
         'profile_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
