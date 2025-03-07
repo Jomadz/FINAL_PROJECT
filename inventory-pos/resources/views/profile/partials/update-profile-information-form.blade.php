@@ -9,30 +9,10 @@
         </p>
     </header>
 
-    <form id="send-verification" method="post" action="{{ route('verification.send') }}">
+    <!-- Form for profile info update -->
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
         @csrf
-    </form>
-
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
-        @csrf
-        @method('patch')
-
-        <!-- Profile Image Upload Section -->
-        <div>
-            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Update Profile Image</h3>
-
-            @if(session('success'))
-                <div class="mt-2 text-sm text-green-600">{{ session('success') }}</div>
-            @endif
-
-            <input type="file" name="profile_image" id="profile_image" accept="image/*" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300">
-            
-            @if ($user->profile_image)
-                <div class="mt-4">
-                    <img src="{{ $user->profile_image }}" alt="Current Profile Image" class="rounded-full w-24 h-24 mb-4">
-                </div>
-            @endif
-        </div>
+        <input type="hidden" name="_method" value="PATCH">
 
         <!-- Name Field -->
         <div>
@@ -80,4 +60,3 @@
             @endif
         </div>
     </form>
-</section>

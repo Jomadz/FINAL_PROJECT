@@ -127,7 +127,7 @@
             <li class="nav-item dropdown user-menu">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                 <img
-                  src="{{ $user->profile_image ?? asset ('images/admin.jpeg') }}"
+                  src="{{ $authenticatedUser->profile_image ?? asset ('images/admin.jpeg') }}"
                   class="user-image rounded-circle shadow"
                   alt="User Image"
                 />
@@ -138,7 +138,7 @@
                 <!--begin::User Image-->
                 <li class="user-header text-bg-primary">
                   <img
-                    src="{{ $user->profile_image ?? asset('images/admin.jpeg')}}"
+                    src="{{ $authenticatedUser->profile_image ?? asset('images/admin.jpeg')}}"
                     class="rounded-circle shadow"
                     alt="User Image"
                   />
@@ -155,19 +155,28 @@
                 <!--end::Menu Body-->
                 <!--begin::Menu Footer-->
                 <li class="user-footer">
-                  
-                <form action="{{ route('profile.update') }}" method="POST">
-    @csrf
-    <input type="text" name="name" value="{{ Auth::user()->name }}" />
-    <!-- Add other fields as needed -->
-    <button type="submit">Update Profile</button>
-</form>
+                
+                 <!-- Form for profile image update -->
+      <form method="post" action="{{ route('profile.image.update') }}" enctype="multipart/form-data">
+        @csrf
+        <div class="d-flex align-items-center">
+          <input type="file" name="profile_image" id="profile_image" accept="image/*" class="form-control me-2">
+          <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+      </form>
+      <form action="{{ route('logout') }}" method="POST" class="mt-2">
+        @csrf
+        <button type="submit" class="btn btn-default btn-flat float-end">Logout</button>
+      </form>
+    </li>
+    <!--end::Menu Footer-->
+  </ul>
+</li>
+<!--end::User  Menu Dropdown-->
+              
 
-<form action="{{ route('logout') }}" method="POST">
-    @csrf
-    <button type="submit">Logout</button>
-</form>
 
+  
 
                 </li>
                 <!--end::Menu Footer-->
@@ -189,7 +198,7 @@
           <a href="./index.html" class="brand-link">
             <!--begin::Brand Image-->
             <img
-              src="{{ asset('img/AdminLTELogo.png')}}"
+              src="{{ asset('images/AdminLTELogo.png')}}"
               alt="AdminLTE Logo"
               class="brand-image opacity-75 shadow"
             />
