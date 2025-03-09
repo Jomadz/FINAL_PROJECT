@@ -48,7 +48,7 @@ class SellerController extends Controller
         ]);
 
         // Redirect to the admin dashboard after creating the seller
-        return redirect()->route('dashboard')->with('success', 'Seller created successfully.');
+        return redirect()->route('admin.dashboard')->with('success', 'Seller created successfully.');
     }
 
     // Show the admin dashboard (same view for admin and seller)
