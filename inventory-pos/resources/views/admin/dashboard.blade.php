@@ -248,15 +248,15 @@
                         </a>
                         <ul class="nav nav-treeview">
                           <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('products.create') }}" class="nav-link">
                               <i class="nav-icon bi bi-circle"></i>
-                              <p>Add Product</p>
+                              <p>Manage product</p>
                             </a>
                           </li>
                           <li class="nav-item">
                             <a href="#" class="nav-link">
                               <i class="nav-icon bi bi-circle"></i>
-                              <p>Manage Product</p>
+                              <p>product overview</p>
                             </a>
                           </li>
                         </ul>

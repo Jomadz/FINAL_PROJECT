@@ -7,6 +7,19 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileImageController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SalesController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/sales', [SalesController::class, 'store'])->name('sales.store');
+    Route::get('/sales/create', [SalesController::class, 'create'])->name('sales.create'); // Add this if you want a separate route for the form
+});
+
+
+//product routes
+Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
+Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
 // Group profile routes under auth middleware
 Route::middleware(['auth'])->group(function () {
