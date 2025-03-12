@@ -9,7 +9,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileImageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\POSController;
 
+// Route for the POS interface
+Route::get('/pos', [POSController::class, 'index'])->name('pos.index')->middleware('auth');
+
+//sales routes
 Route::middleware(['auth'])->group(function () {
     Route::post('/sales', [SalesController::class, 'store'])->name('sales.store');
     Route::get('/sales/create', [SalesController::class, 'create'])->name('sales.create'); // Add this if you want a separate route for the form
@@ -40,7 +45,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
 
@@ -54,6 +58,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Admin posts the form to store the seller
     Route::post('/admin/create-seller', [SellerController::class, 'store'])->name('admin.store-seller');
+
+     // Admin can view the list of sellers
+     Route::get('/admin/sellers', [SellerController::class, 'index'])->name('admin.sellers');
+
+     // Route for updating a seller
+    Route::put('/admin/sellers/{id}', [SellerController::class, 'update'])->name('admin.update-seller');
 });
 
 Route::middleware(['auth', 'role:seller'])->group(function () {

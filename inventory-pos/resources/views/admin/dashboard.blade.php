@@ -61,6 +61,36 @@
   href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta3/dist/css/adminlte.min.css"
   crossorigin="anonymous"
 />
+
+<!-- Floating Icons CSS -->
+<style>
+        .floating-icons {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            background-color: rgb(252, 252, 252); /* Optional: background for visibility */
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 1000; /* Ensure it is above other elements */
+        }
+
+        .floating-icons .icon {
+            color: black; /* Change icon color */
+            margin: 10px 0;
+            text-align: center;
+            font-size: 24px; /* Adjust size as needed */
+            transition: color 0.3s;
+        }
+
+        .floating-icons .icon:hover {
+            color:rgb(109, 106, 106); /* Change color on hover */
+        }
+    </style>
+
+
   </head>
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <!--begin::App Wrapper-->
@@ -89,20 +119,7 @@
               </a>
             </li>
             <!--end::Navbar Search-->
-            <!--begin::Messages Dropdown Menu-->
-            <li class="nav-item dropdown">
-              <a class="nav-link" data-bs-toggle="dropdown" href="#">
-                <i class="bi bi-chat-text"></i>
-                <span class="navbar-badge badge text-bg-danger">3</span>
-              </a>
-              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                <a href="#" class="dropdown-item">
-                  
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                  
-                </a>
+           
                
 
 
@@ -176,8 +193,6 @@
               
 
 
-  
-
                 </li>
                 <!--end::Menu Footer-->
               </ul>
@@ -221,7 +236,7 @@
               data-accordion="false"
             >
               <li class="nav-item ">
-                <a href="#" class="nav-link active">
+                <a href="{{ route('pos.index') }}" class="nav-link">
                   <i class="nav-icon bi bi-cart"></i>
                   <p>
                     POS
@@ -342,11 +357,43 @@
                         </a>
                       </li>
                     </ul>
-                    <!--end::Sidebar Menu-->
+                    <!--end::Sidebar Menu--> 
                   </nav>
                 </div>
                 <!--end::Sidebar Wrapper-->
               </aside>
+              <!-- Floating Icons -->
+<div class="floating-icons">
+    <a href="{{ route('pos.index') }}" class="icon">
+        <i class="bi bi-cart"></i>
+    </a>
+    <a href="{{ route('products.create') }}" class="icon">
+        <i class="bi bi-box-seam-fill"></i>
+    </a>
+    <a href="#" class="icon">
+        <i class="bi bi-cart-check-fill"></i>
+    </a>
+    <a href="#" class="icon">
+        <i class="bi bi-cart-plus-fill"></i>
+    </a>
+    <a href="#" class="icon">
+        <i class="bi bi-cash-coin"></i>
+    </a>
+    @if(auth()->user()->role === 'admin')
+    <a href="{{ route('admin.create-seller') }}" class="icon">
+        <i class="bi bi-people-fill"></i>
+    </a>
+    @endif
+    <a href="#" class="icon">
+        <i class="bi bi-graph-up"></i>
+    </a>
+    <a href="#" class="icon">
+        <i class="bi bi-bar-chart-line-fill"></i>
+    </a>
+    <a href="#" class="icon">
+        <i class="bi bi-shop"></i>
+    </a>
+</div>
 
               
                    
@@ -425,7 +472,7 @@
         <!--begin::Copyright-->
         <strong>
           Copyright &copy; 2024-2025&nbsp;
-          <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.
+          <a href=" " class="text-decoration-none"></a>.
         </strong>
         All rights reserved.
         <!--end::Copyright-->
@@ -642,6 +689,17 @@
       //-----------------
       // - END PIE CHART -
       //-----------------
+    </script>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.querySelector('.app-sidebar');
+            const toggleButton = document.querySelector('[data-lte-toggle="sidebar"]'); // Assuming you have a toggle button
+
+            toggleButton.addEventListener('click', function () {
+                sidebar.classList.toggle('closed'); // Add a class to close the sidebar
+            });
+        });
     </script>
     <!--end::Script-->
   </body>

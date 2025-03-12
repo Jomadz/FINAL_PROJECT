@@ -24,9 +24,12 @@ class SellerController extends Controller
             // Redirect to admin dashboard if there are already 4 sellers
             return redirect()->route('dashboard')->withErrors('You can only create up to 4 sellers.');
         }
+         // Retrieve all sellers
+    $sellers = User::where('role', 'seller')->get();
+
 
         // Proceed to the seller creation form
-        return view('admin.create-seller');
+        return view('admin.create-seller', compact('sellers') );
     }
 
     // Store a new seller
@@ -37,6 +40,8 @@ class SellerController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
+            'role' => 'seller',  // Assign role as 'seller'
+
         ]);
 
         // Create the new seller
@@ -50,6 +55,26 @@ class SellerController extends Controller
         // Redirect to the admin dashboard after creating the seller
         return redirect()->route('admin.dashboard')->with('success', 'Seller created successfully.');
     }
+    public function update(Request $request, $id)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $id,
+        'password' => 'nullable|string|min:8|confirmed',
+    ]);
+
+    $seller = User::findOrFail($id);
+    $seller->name = $request->name;
+    $seller->email = $request->email;
+
+    if ($request->filled('password')) {
+        $seller->password = bcrypt($request->password);
+    }
+
+    $seller->save();
+
+    return redirect()->route('admin.sellers')->with('success', 'Seller updated successfully.');
+}
 
     // Show the admin dashboard (same view for admin and seller)
     public function dashboard()
