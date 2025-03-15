@@ -25,6 +25,9 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
 Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
 Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
+Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
 
 // Group profile routes under auth middleware
 Route::middleware(['auth'])->group(function () {
@@ -64,6 +67,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
      // Route for updating a seller
     Route::put('/admin/sellers/{id}', [SellerController::class, 'update'])->name('admin.update-seller');
+
+    Route::delete('/admin/sellers/{id}', [SellerController::class, 'destroy'])->name('admin.delete-seller');
 });
 
 Route::middleware(['auth', 'role:seller'])->group(function () {

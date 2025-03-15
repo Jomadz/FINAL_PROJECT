@@ -1,48 +1,100 @@
-@extends('layouts.app')
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Sellers</title>
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-    <script src="{{ asset('js/scripts.js') }}" defer></script>
+    <title>Create Seller</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color:rgb(255, 255, 255);
+            margin: 0;
+            padding: 0;
+        }
+
+        
+
+        h1 {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .btn-primary {
+            background-color: #001f3f; /* Dark Navy */
+            border-color: #001f3f; /* Dark Navy */
+            color: white; /* White text for button */
+        }
+
+        .btn-primary:hover {
+            background-color: #001a33; /* Darker Navy for hover */
+            border-color: #001a33; /* Darker Navy for hover */
+        }
+
+        .btn-danger {
+            background-color: #4b4b4b; /* Dark Grey */
+            border-color: #4b4b4b; /* Dark Grey */
+            color: white; /* White text for delete button */
+        }
+
+        .btn-danger:hover {
+            background-color: #3d3d3d; /* Darker Grey for hover */
+            border-color: #3d3d3d; /* Darker Grey for hover */
+        }
+    </style>
 </head>
 <body>
-    
-    <div class="container">
+    <div class="container mt-5">
         <h1>Create a New Seller</h1>
 
-        <form action="{{ route('admin.create-seller') }}" method="POST">
+        <form action="{{ route('admin.store-seller') }}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" name="name" id="name" required>
+                <input type="text" name="name" id="name" required class="form-control">
             </div>
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" name="email" id="email" required>
+                <input type="email" name="email" id="email" required class="form-control">
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" required>
+                <input type="password" name="password" id="password" required class="form-control">
             </div>
 
             <div class="form-group">
                 <label for="password_confirmation">Confirm Password</label>
-                <input type="password" name="password_confirmation" id="password_confirmation" required>
+                <input type="password" name="password_confirmation" id="password_confirmation" required class="form-control">
             </div>
 
             <div>
-                <button type="submit" class="btn">Create Seller</button>
+                <button type="submit" class="btn btn-primary">Create Seller</button>
+                <a href="{{ route('admin.sellers') }}" class="btn btn-danger">Cancel</a>
             </div>
         </form>
 
-        <h2>Manage Sellers</h2>
-        <table>
+        <h2 class="mt-5">Manage Sellers</h2>
+        <table class="table">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -51,135 +103,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($sellers as $seller)
-                    <tr>
-                        <td>{{ $seller->name }}</td>
-                        <td>{{ $seller->email }}</td>
-                        <td>
-                            <a href="{{ route('admin.update-seller', $seller->id) }}" class="btn">Edit</a>
-                            <form action="{{ route('admin.update-seller', $seller->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
+                
             </tbody>
         </table>
     </div>
-
 </body>
 </html>
-
-    
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-}
-
-.container {
-    max-width: 600px;
-    margin: 20px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    color: #333;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    color: #333;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-.btn {
-    background-color: #5cb85c;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.btn:hover {
-    background-color: #4cae4c;
-}
-
-.footer {
-    margin-top: 20px;
-    text-align: center;
-    color: #777;
-}
-</style>
-<script>
-    // Function to confirm deletion
-function confirmDelete(sellerId) {
-    const confirmation = confirm("Are you sure you want to delete this seller?");
-    if (confirmation) {
-        document.getElementById(`delete-seller-${sellerId}`).submit();
-    }
-}
-
-// Example function to show edit form
-function editSeller(sellerId) {
-    // Fetch user details via AJAX or show a modal for editing
-    // This is a placeholder for the actual implementation
-    alert(`Edit functionality for seller ID: ${sellerId}`);
-}
-</script>
-
-<style>
-    /* Custom styles for the form and table */
-    .form-control {
-        border-radius: 0.25rem;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-    }
-
-    .btn-danger {
-        background-color: #dc3545;
-        border-color: #dc3545;
-    }
-
-    .table {
-        margin-top: 20px;
-        border-radius: 0.25rem;
-        overflow: hidden;
-    }
-
-    .table th, .table td {
-        vertical-align: middle;
-    }
-
-    .table-striped tbody tr:nth-of-type(odd) {
-        background-color: #f9f9f9;
-    }
-
-    .table-striped tbody tr:hover {
-        background-color: #f1f1f1;
-    }
-</style>
