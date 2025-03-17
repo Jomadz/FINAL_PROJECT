@@ -66,3 +66,4 @@
         alert('Checkout not implemented yet!');
     });
 </script>
+@endsession

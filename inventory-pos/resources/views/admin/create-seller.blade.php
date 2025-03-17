@@ -90,22 +90,11 @@
             <div>
                 <button type="submit" class="btn btn-primary">Create Seller</button>
                 <a href="{{ route('admin.sellers') }}" class="btn btn-danger">Cancel</a>
+                <a href="{{ route('admin.all-sellers') }}" class="btn btn-secondary float-right ">All sellers</a>
             </div>
         </form>
 
-        <h2 class="mt-5">Manage Sellers</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-            </tbody>
-        </table>
+        
     </div>
 </body>
 </html>
