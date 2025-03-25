@@ -1,7 +1,8 @@
 
+
 <!doctype html>
 <html lang="en">
-<head>
+  <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Admin | Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -87,7 +88,7 @@
     </style>
   </head>
   
-  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+  <body> class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <div class="app-wrapper">
 
    <!--This is the header session-->
@@ -133,53 +134,50 @@
         }
     </style>
 </head>
-
-
-    
 <body>
     <div class="container mt-5">
-        <h2 class="mt-5">Existing Products</h2>
-        
-        <!-- Add Product Button -->
-        <a href="{{ route('products.create') }}" class="btn btn-primary mb-3">Add Product</a>
+    <h1>Edit Seller</h1>
 
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>SKU</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($products as $product)
-                    <tr>
-                        <td>{{ $product->product_name }}</td>
-                        <td>{{ $product->product_sku }}</td>
-                        <td>
-                            <!-- Edit Action -->
-                            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                            
-                            <!-- Delete Action -->
-                            <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this product?');">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-           
-        </table>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
     </div>
-   <!--This is the header session-->
+@endif
+
+<form action="{{ route('admin.update-seller', $seller->id) }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    @method('PUT') <!-- Use PUT method for updating -->
+    
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" value="{{ old('name', $seller->name) }}" required class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" value="{{ old('email', $seller->email) }}" required class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" class="form-control" placeholder="Leave blank to keep current password">
+    </div>
+
+    <div class="form-group">
+        <label for="password_confirmation">Confirm Password</label>
+        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Leave blank to keep current password">
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button type="{{route('admin.all-sellers') }}" class="btn btn-secondary">Back to Sellers</a>
+</form>  
+    </div>
+    <!--This is the header session-->
    @include('admin.body.footer')
+
 
 </div>
 

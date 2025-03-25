@@ -1,4 +1,3 @@
- 
 <!doctype html>
 <html lang="en">
   <head>
@@ -98,34 +97,51 @@
   @include('admin.body.sidebar')
 
 
+<div class="container mt-5">
+        <h2 class="mt-5">Existing Sellers</h2>
+        
+       
 
- 
-  <div class="container">
-    <h1>Point of Sale (POS)</h1>
+        @if(session('success'))
+            <div class="alert alert-success">
+            </div>
+        @endif
 
-    <div class="row">
-        <div class="col-md-6">
-            <h3>Products</h3>
-            <ul class="list-group">
-                @foreach($products as $product)
-                    <li class="list-group-item">
-                        <strong>{{ $product->name }}</strong> - ${{ $product->price }}
-                        <button class="btn btn-primary btn-sm float-end add-to-cart" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $product->price }}">Add to Cart</button>
-                    </li>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Seller Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($sellers as $seller)
+                    <tr>
+                        <td>{{ $seller->name }}</td>
+                        <td>{{ $seller->email }}</td>
+                        <td>
+                            <!-- Edit Action -->
+                            <a href="{{ route('admin.edit-seller', $seller->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                            
+                            <!-- Delete Action -->
+                            <form action="{{ route('admin.delete-seller', $seller->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this product?');">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
                 @endforeach
-            </ul>
-        </div>
+            </tbody>
+        </table>
+        <!-- Add seller Button -->
+        <a href="{{ route('admin.create-seller') }}" class="btn btn-primary mb-3">Add Seller</a></div>
+        </form>
 
-        <div class="col-md-6">
-            <h3>Cart</h3>
-            <ul class="list-group" id="cart">
-                <!-- Cart items will be dynamically added here -->
-            </ul>
-            <h4>Total: $<span id="total">0.00</span></h4>
-            <button class="btn btn-success" id="checkout">Checkout</button>
-        </div>
+       
     </div>
-</div>
+
 
 
 
@@ -173,59 +189,5 @@
       });
     });
   </script>
-
-<script>
-    let cart = [];
-    let total = 0;
-
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
-            const name = this.getAttribute('data-name');
-            const price = parseFloat(this.getAttribute('data-price'));
-
-            // Add to cart
-            cart.push({ id, name, price });
-            total += price;
-
-            // Update cart display
-            updateCart();
-        });
-    });
-
-    function updateCart() {
-        const cartList = document.getElementById('cart');
-        cartList.innerHTML = ''; // Clear current cart
-
-        cart.forEach(item => {
-            const li = document.createElement('li');
-            li.className = 'list-group-item';
-            li.textContent = `${item.name} - $${item.price.toFixed(2)}`;
-            cartList.appendChild(li);
-        });
-
-        document.getElementById('total').textContent = total.toFixed(2);
-    }
-
-    document.getElementById('checkout').addEventListener('click', function() {
-        // Handle checkout logic here
-        alert('Checkout not implemented yet!');
-    });
-</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 

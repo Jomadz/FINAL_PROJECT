@@ -69,6 +69,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/sellers/{id}', [SellerController::class, 'update'])->name('admin.update-seller');
 
     Route::delete('/admin/sellers/{id}', [SellerController::class, 'destroy'])->name('admin.delete-seller');
+    
+Route::get('/admin/sellers/all', [SellerController::class, 'allSellers'])->name('admin.all-sellers');
+
+Route::get('/admin/sellers/{id}/edit', [SellerController::class, 'edit'])->name('admin.edit-seller');
+
 });
 
 Route::middleware(['auth', 'role:seller'])->group(function () {

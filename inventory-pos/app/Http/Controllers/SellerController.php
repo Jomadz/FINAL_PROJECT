@@ -58,7 +58,7 @@ class SellerController extends Controller
         $sellers = User::where('role', 'seller')->get();
 
         // Return the view with the list of sellers
-        return view('admin.sellers.index', compact('sellers'));
+        return view('admin.all_sellers', compact('sellers'));
     }
 
     // Show the form to edit a seller
@@ -68,7 +68,7 @@ class SellerController extends Controller
         $seller = User::findOrFail($id);
 
         // Return the edit view with the seller data
-        return view('admin.sellers.edit', compact('seller'));
+        return view('admin.edit-seller', compact('seller'));
     }
 
     // Update a seller's information
@@ -107,10 +107,18 @@ class SellerController extends Controller
         return redirect()->route('admin.sellers')->with('success', 'Seller deleted successfully.');
     }
 
+    // Show all sellers
+    public function allSellers()
+    {
+        // Retrieve all sellers
+        $sellers = User::where('role', 'seller')->get(); 
+        return view('admin.all_sellers', compact('sellers'));
+    }
+
     // Show the admin dashboard
     public function dashboard()
     {
-        $authenticatedUser  = Auth::user();
+        $authenticatedUser   = Auth::user();
 
         // Check if the user is authenticated
         if (!$authenticatedUser ) {
@@ -118,6 +126,6 @@ class SellerController extends Controller
         }
 
         // Return the view and pass the authenticated user data
-        return view('admin.dashboard', compact('authenticatedUser'));
+        return view('admin.dashboard', compact('authenticatedUser '));
     }
 }
