@@ -68,7 +68,7 @@ class SellerController extends Controller
         $seller = User::findOrFail($id);
 
         // Return the edit view with the seller data
-        return view('admin.sellers.edit', compact('seller'));
+        return view('admin.edit-seller', compact('seller'));
     }
 
     // Update a seller's information

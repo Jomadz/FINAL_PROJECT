@@ -1,6 +1,7 @@
+
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Admin | Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -97,35 +98,76 @@
   @include('admin.body.sidebar')
 
 
-<div class="container mt-5">
-        <h2 class="mt-5">Existing Sellers</h2>
+
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .form-control {
+            border-radius: 0.25rem;
+        }
+
+        .btn-primary {
+            background-color: #001f3f; /* Dark Navy for Save */
+            border-color: #001f3f; /* Dark Navy for Save */
+            color: white; /* White text for button */
+        }
+
+        .btn-primary:hover {
+            background-color: #001a33; /* Darker Navy for hover */
+            border-color: #001a33; /* Darker Navy for hover */
+        }
+
+        .btn-danger {
+            background-color: #4b4b4b; /* Dark Grey for Delete */
+            border-color: #4b4b4b; /* Dark Grey for Delete */
+            color: white; /* White text for delete button */
+        }
+
+        .btn-danger:hover {
+            background-color: #3d3d3d; /* Darker Grey for hover */
+            border-color: #3d3d3d; /* Darker Grey for hover */
+        }
+    </style>
+</head>
+
+
+    
+<body>
+    <div class="container mt-5">
+        <h2 class="mt-5">Existing Products</h2>
         
-       
+        <!-- Add Product Button -->
+        <a href="{{ route('products.create') }}" class="btn btn-primary mb-3">Add Product</a>
 
         @if(session('success'))
             <div class="alert alert-success">
+                {{ session('success') }}
             </div>
         @endif
 
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Seller Name</th>
-                    <th>Email</th>
+                    <th>Product Name</th>
+                    <th>SKU</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($sellers as $seller)
+                @foreach($products as $product)
                     <tr>
-                        <td>{{ $seller->name }}</td>
-                        <td>{{ $seller->email }}</td>
+                        <td>{{ $product->product_name }}</td>
+                        <td>{{ $product->product_sku }}</td>
                         <td>
                             <!-- Edit Action -->
-                            <a href="{{ route('admin.edit-seller', $seller->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary btn-sm">Edit</a>
                             
                             <!-- Delete Action -->
-                            <form action="{{ route('admin.delete-seller', $seller->id) }}" method="POST" style="display:inline;">
+                            <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this product?');">Delete</button>
@@ -133,61 +175,48 @@
                         </td>
                     </tr>
                 @endforeach
-            </tbody>
+           
         </table>
-        <!-- Add seller Button -->
-        <a href="{{ route('admin.create-seller') }}" class="btn btn-primary mb-3">Add Seller</a></div>
-        </form>
-
-       
     </div>
-
-
-
-
-
-
-    
-
    <!--This is the header session-->
    @include('admin.body.footer')
 
-  </div>
+</div>
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-dghWARbRe2eLlIJ56wNB+b760ywulqK3DzZYEpsg2fQ=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta3/dist/js/adminlte.min.js" crossorigin="anonymous"></script>
-  <script>
-    const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
-    const Default = {
-      scrollbarTheme: 'os-theme-light',
-      scrollbarAutoHide: 'leave',
-      scrollbarClickScroll: true,
-    };
-    document.addEventListener('DOMContentLoaded', function () {
-      const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
-      if (sidebarWrapper && typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== 'undefined') {
-        OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
-          scrollbars: {
-            theme: Default.scrollbarTheme,
-            autoHide: Default.scrollbarAutoHide,
-            clickScroll: Default.scrollbarClickScroll,
-          },
-        });
-      }
-    });
-  </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const sidebar = document.querySelector('.app-sidebar');
-      const toggleButton = document.querySelector('[data-lte-toggle="sidebar"]');
-
-      toggleButton.addEventListener('click', function () {
-        sidebar.classList.toggle('closed');
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-dghWARbRe2eLlIJ56wNB+b760ywulqK3DzZYEpsg2fQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta3/dist/js/adminlte.min.js" crossorigin="anonymous"></script>
+<script>
+  const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+  const Default = {
+    scrollbarTheme: 'os-theme-light',
+    scrollbarAutoHide: 'leave',
+    scrollbarClickScroll: true,
+  };
+  document.addEventListener('DOMContentLoaded', function () {
+    const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+    if (sidebarWrapper && typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== 'undefined') {
+      OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+        scrollbars: {
+          theme: Default.scrollbarTheme,
+          autoHide: Default.scrollbarAutoHide,
+          clickScroll: Default.scrollbarClickScroll,
+        },
       });
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const sidebar = document.querySelector('.app-sidebar');
+    const toggleButton = document.querySelector('[data-lte-toggle="sidebar"]');
+
+    toggleButton.addEventListener('click', function () {
+      sidebar.classList.toggle('closed');
     });
-  </script>
+  });
+</script>
 </body>
 </html>

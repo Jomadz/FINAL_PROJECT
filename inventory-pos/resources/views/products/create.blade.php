@@ -88,176 +88,33 @@
   
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <div class="app-wrapper">
-      <nav class="app-header navbar navbar-expand bg-body">
-        <div class="container-fluid">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
-                <i class="bi bi-list"></i>
-              </a>
-            </li>
-            <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Home</a></li>
-            <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Contact</a></li>
-          </ul>
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                <i class="bi bi-search"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" data-lte-toggle="fullscreen">
-                <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
-                <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none"></i>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </nav>
 
-      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
-        <div class="sidebar-brand">
-          <a href="./index.html" class="brand-link">
-            <img src="{{ asset('images/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image opacity-75 shadow" />
-            <span class="brand-text fw-light">Admin</span>
-          </a>
-        </div>
-        <div class="sidebar-wrapper">
-          <nav class="mt-2">
-            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
-              <li class="nav-item">
-                <a href="{{ route('pos.index') }}" class="nav-link">
-                  <i class="nav-icon bi bi-cart"></i>
-                  <p>POS</p>
-                </a>
-              </li>
+   <!--This is the header session-->
+@include('admin.body.header')
+     
 
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-box-seam-fill"></i>
-                  <p>Product <i class="nav-arrow bi bi-chevron-right"></i></p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="{{ route('products.create') }}" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Manage Product</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Product Overview</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
+      <!--This is the sidebar session-->
+  @include('admin.body.sidebar')
 
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-cart-check-fill"></i>
-                  <p>Sales</p>
-                </a>
-              </li>
 
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-cart-plus-fill"></i>
-                  <p>Purchases</p>
-                </a>
-              </li>
 
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-cash-coin"></i>
-                  <p>Expenses</p>
-                </a>
-              </li>
+ 
+@yield('admin')
 
-              @if(auth()->user()->role === 'admin')
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-people-fill"></i>
-                  <p>Sellers <i class="nav-arrow bi bi-chevron-right"></i></p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="{{ route('admin.create-seller') }}" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Register Seller</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Seller Activities</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              @endif
 
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-graph-up"></i>
-                  <p>Revenue</p>
-                </a>
-              </li>
 
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-bar-chart-line-fill"></i>
-                  <p>Charts</p>
-                </a>
-              </li>
 
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-shop"></i>
-                  <p>Chain Stores</p>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </aside>
 
-      <div class="floating-icons">
-        <a href="{{ route('pos.index') }}" class="icon">
-          <i class="bi bi-cart"></i>
-        </a>
-        <a href="{{ route('products.create') }}" class="icon">
-          <i class="bi bi-box-seam-fill"></i>
-        </a>
-        <a href="#" class="icon">
-          <i class="bi bi-cart-check-fill"></i>
-        </a>
-        <a href="#" class="icon">
-          <i class="bi bi-cart-plus-fill"></i>
-        </a>
-        <a href="#" class="icon">
-          <i class="bi bi-cash-coin"></i>
-        </a>
-        @if(auth()->user()->role === 'admin')
-        <a href="{{ route('admin.create-seller') }}" class="icon">
-          <i class="bi bi-people-fill"></i>
-        </a>
-        @endif
-        <a href="#" class="icon">
-          <i class="bi bi-graph-up"></i>
-        </a>
-        <a href="#" class="icon">
-          <i class="bi bi-bar-chart-line-fill"></i>
-        </a>
-        <a href="#" class="icon">
-          <i class="bi bi-shop"></i>
-        </a>
-      </div>
 
-      <div class="app-content">
+    
+
+   <!--This is the header session-->
+   @include('admin.body.footer')
+
+  <div class="app-content">
         <div class="container-fluid">
           @section('content')
-          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+          
           <div class="container">
             <h1 class="my-4">Add New Product</h1>
             @if ($errors->any())
@@ -347,66 +204,12 @@
                 </div>
               </div>
               <button type="submit" class="btn btn-primary mb-3">Add Product</button>
-              <a href="{{ route('products.index') }}" class="btn btn-secondary mb-3 float-right">All Products</a>
+              <a href="{{ route('products.index') }}" class="btn btn-secondary mb-3">All Products</a>
             </form>
 
             
           </div>
 
-          <style>
-            .form-control {
-                border-radius: 0.25rem;
-            }
-
-            .btn-primary {
-                background-color: #001f3f; /* Dark Navy for Add Product */
-                border-color: #001f3f; /* Dark Navy for Add Product */
-                color: white; /* White text for button */
-            }
-
-            .btn-primary:hover {
-                background-color: #001a33; /* Darker Navy for hover */
-                border-color: #001a33; /* Darker Navy for hover */
-            }
-
-            .btn-danger {
-                background-color: #4b4b4b; /* Dark Grey for Delete */
-                border-color: #4b4b4b; /* Dark Grey for Delete */
-                color: white; /* White text for delete button */
-            }
-
-            .btn-danger:hover {
-                background-color: #3d3d3d; /* Darker Grey for hover */
-                border-color: #3d3d3d; /* Darker Grey for hover */
-            }
-
-            .table {
-                margin-top: 20px;
-                border-radius: 0.25rem;
-                overflow: hidden;
-            }
-
-            .table th, .table td {
-                vertical-align: middle;
-            }
-
-            .table-striped tbody tr:nth-of-type(odd) {
-                background-color: #f9f9f9;
-            }
-
-            .table-striped tbody tr:hover {
-                background-color: #f1f1f1;
-            }
-          </style>
-        </div>
-      </div>
-    </main>
-
-    <footer class="app-footer">
-      <div class="float-end d-none d-sm-inline">Anything you want</div>
-      <strong>Copyright &copy; 2024-2025&nbsp;<a href="#" class="text-decoration-none"></a>.</strong> All rights reserved.
-    </footer>
-  </div>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-dghWARbRe2eLlIJ56wNB+b760ywulqK3DzZYEpsg2fQ=" crossorigin="anonymous"></script>
