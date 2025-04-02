@@ -64,5 +64,6 @@ class Kernel extends HttpKernel
         
         // Add the role middleware here for use in routes
         'role' => \App\Http\Middleware\RoleMiddleware::class,
+       
     ];
 }

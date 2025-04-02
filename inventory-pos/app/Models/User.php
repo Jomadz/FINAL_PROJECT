@@ -41,4 +41,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    //I edited the lines below
+     // Relationship to get products created by the user
+     public function createdProducts()
+     {
+         return $this->hasMany(Product::class, 'added_by');
+     }
+ 
+     // Relationship to get products last updated by the user
+     public function updatedProducts()
+     {
+         return $this->hasMany(Product::class, 'last_updated_by');
+     }
 }

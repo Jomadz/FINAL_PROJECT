@@ -129,7 +129,7 @@
                 <i class="bi bi-list"></i>
               </a>
             </li>
-            <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Home</a></li>
+            <li class="nav-item d-none d-md-block"><a href="" class="nav-link">Home</a></li>
             <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Contact</a></li>
           </ul>
           <!--end::Start Navbar Links-->
@@ -347,7 +347,7 @@
             </li>
             <!-- Seller Activities -->
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="{{ route('admin.seller-activities') }}" class="nav-link">
                 <i class="nav-icon bi bi-circle"></i>
                 <p>Seller Activities</p>
               </a>
