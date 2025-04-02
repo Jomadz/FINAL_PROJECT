@@ -9,8 +9,14 @@
                 <i class="bi bi-list"></i>
               </a>
             </li>
-            <li class="nav-item d-none d-md-block"><a href="{{ route('admin.dashboard') }}" class="nav-link">Home</a></li>
-            <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Contact</a></li>
+            <li class="nav-item d-none d-md-block">
+    @if(auth()->user()->role === 'admin')
+        <a href="{{ route('admin.dashboard') }}" class="nav-link">Home</a>
+    @else
+        <a href="{{ route('seller.dashboard') }}" class="nav-link">Home</a>
+    @endif
+</li>
+           
           </ul>
           <!--end::Start Navbar Links-->
           <!--begin::End Navbar Links-->
