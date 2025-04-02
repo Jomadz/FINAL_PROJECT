@@ -141,13 +141,7 @@
 
        
     </div>
-
-
-
-
-
-
-    
+  
 
    <!--This is the header session-->
    @include('admin.body.footer')

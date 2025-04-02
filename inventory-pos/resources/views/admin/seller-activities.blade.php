@@ -1,7 +1,6 @@
-
 <!doctype html>
 <html lang="en">
-<head>
+  <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Admin | Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -98,105 +97,41 @@
   @include('admin.body.sidebar')
 
 
+  <div class="container mt-5">
+    <h1>Seller Activities</h1>
 
- 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Product</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .form-control {
-            border-radius: 0.25rem;
-        }
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
-        .btn-primary {
-            background-color: #001f3f; /* Dark Navy for Save */
-            border-color: #001f3f; /* Dark Navy for Save */
-            color: white; /* White text for button */
-        }
-
-        .btn-primary:hover {
-            background-color: #001a33; /* Darker Navy for hover */
-            border-color: #001a33; /* Darker Navy for hover */
-        }
-
-        .btn-danger {
-            background-color: #4b4b4b; /* Dark Grey for Delete */
-            border-color: #4b4b4b; /* Dark Grey for Delete */
-            color: white; /* White text for delete button */
-        }
-
-        .btn-danger:hover {
-            background-color: #3d3d3d; /* Darker Grey for hover */
-            border-color: #3d3d3d; /* Darker Grey for hover */
-        }
-    </style>
-</head>
-
-
-    
-<body>
-    <div class="container mt-5">
-        <h2 class="mt-5">Existing Products</h2>
-        
-        <!-- Add Product Button -->
-        <a href="{{ route('products.create') }}" class="btn btn-primary mb-3">Add Product</a>
-
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <table class="table table-striped">
-            <thead>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Activity Type</th>
+                <th>Product Name</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($activities as $activity)
                 <tr>
-                    <th>Product Name</th>
-                    <th>SKU</th>
-                    <th>Image</th>
-                    <th>Created By</th>
-                <th>Last Updated By</th>
-                <th>Actions</th>
+                    <td>{{ optional($activity->user)->name }}</td> <!-- Display user name -->
+                    <td>{{ $activity->activity_type }}</td> <!-- Display activity type -->
+                    <td>{{ optional($activity->product)->product_name }}</td> <!-- Display product name -->
+                    <td>{{ $activity->created_at->format('d/m/Y H:i') }}</td> <!-- Format timestamp -->
                 </tr>
-            </thead>
-            <tbody>
-                @foreach($products as $product)
-                    <tr>
-                        <td>{{ $product->product_name }}</td>
-                        <td>{{ $product->product_sku }}</td>
-                        <td>
-                        @if($product->product_image)
+            @endforeach
+        </tbody>
+    </table>
 
-                        <img src="{{ asset('storage/' . $product->product_image) }}" alt="{{ $product->product_name }}"style="width: 50px; height: 50px; border-radius: 40%; object-fit: cover;">
+</div>
 
-                        @else
-                           no image
-                        @endif
-                    </td>
-                        <td>{{ $product->creator ? $product->creator->name : 'N/A' }}</td>
-                        <td>{{ $product->updater ? $product->updater->name : 'N/A' }}</td>
-                        
-                        
-                        <td>
-                            <!-- Edit Action -->
-                            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                            
-                            <!-- Delete Action -->
-                            <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this product?');">Delete</button>
-                            </form>
-                        </td>
-                      
-                    </tr>
-                @endforeach
-           
-        </table>
-    </div>
-   <!--This is the header session-->
-   @include('admin.body.footer')
+<!--This is the header session-->
+@include('admin.body.footer')
+
 
 </div>
 

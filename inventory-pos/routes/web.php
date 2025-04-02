@@ -10,7 +10,12 @@ use App\Http\Controllers\ProfileImageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\POSController;
+use App\Http\Controllers\SellerActivityController;
 
+
+
+// Route to display seller activities
+Route::get('/admin/seller-activities', [SellerActivityController::class, 'index'])->name('admin.seller-activities');
 // Route for the POS interface
 Route::get('/pos', [POSController::class, 'index'])->name('pos.index')->middleware('auth');
 
@@ -73,6 +78,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::get('/admin/sellers/all', [SellerController::class, 'allSellers'])->name('admin.all-sellers');
 
 Route::get('/admin/sellers/{id}/edit', [SellerController::class, 'edit'])->name('admin.edit-seller');
+
+
 
 });
 
