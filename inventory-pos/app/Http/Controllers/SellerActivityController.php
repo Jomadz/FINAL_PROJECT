@@ -8,11 +8,25 @@ use Illuminate\Support\Facades\Auth;
 
 class SellerActivityController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // Capture the search parameters
+        $activityType = $request->input('activity_type');
+        $date = $request->input('date');
+
         // Fetch all seller activities with related user and product
-        $activities = SellerActivity::with('user', 'product')->orderBy('created_at', 'desc')->get();
-        
+       
+        // Query the seller activities and apply filters if any search parameters are provided
+        $activities = SellerActivity::with('user', 'product') // Eager load relationships
+            ->when($activityType, function ($query, $activityType) {
+                return $query->where('activity_type', 'like', '%' . $activityType . '%');
+            })
+            ->when($date, function ($query, $date) {
+                return $query->whereDate('created_at', $date);
+            })
+            ->orderBy('created_at', 'desc') // Order by date descending
+            ->get();
+
         // Return the view with activities
         return view('admin.seller-activities', compact('activities'));
     }

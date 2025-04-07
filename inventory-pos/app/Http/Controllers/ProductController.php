@@ -6,13 +6,15 @@ use App\Models\Product; // Make sure to import the Product model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\SellerActivity; // Import the SellerActivity model
+use App\Models\Category;
 
 class ProductController extends Controller
 {
     public function create()
     {
+        $categories = Category::all();
         $products = Product::all();
-        return view('products.create', compact('products')); // This will point to the view for adding a product
+        return view('products.create', compact('products', 'categories')); // This will point to the view for adding a product
     }
 
     public function store(Request $request)
@@ -38,6 +40,18 @@ class ProductController extends Controller
             'expiry_date' => 'nullable|date',
         ]);
 
+
+       
+    // If new category is entered, create it
+    if ($request->filled('new_category')) {
+        $category = Category::firstOrCreate(['name' => $request->new_category]);
+        $categoryId = $category->id;
+    } else {
+        $categoryId = $request->product_category;
+    }
+
+
+    
         // Create a new product instance
         $product = new Product();
         $product->product_name = $request->product_name;
@@ -87,8 +101,9 @@ class ProductController extends Controller
 
     public function edit($id)
     {
+        $categories = Category::all();
         $product = Product::findOrFail($id); // Fetch the product by ID
-        return view('products.edit', compact('product')); // Return the edit view with the product
+        return view('products.edit', compact('product', 'categories')); // Return the edit view with the product
     }
 
     public function update(Request $request, $id)
@@ -116,6 +131,14 @@ class ProductController extends Controller
 
         // Find the product by ID
         $product = Product::findOrFail($id);
+
+         // Handle new category creation if provided
+    if ($request->filled('new_category')) {
+        $category = Category::firstOrCreate(['name' => $request->new_category]);
+        $categoryId = $category->id;
+    } else {
+        $categoryId = $request->product_category;
+    }
 
         // Update the product with the new data
         $product->product_name = $request->product_name;
@@ -155,6 +178,22 @@ class ProductController extends Controller
         // Redirect back with a success message
         return redirect()->route('products.index')->with('success', 'Product updated successfully!');
     }
+
+    public function getProductsByCategory($id)
+    {
+        // Fetch products based on the category ID
+        $products = Product::where('product_category', $id)->get(); 
+        // Add this for debugging:
+            \Log::info('Products fetched:', ['id' => $id, 'products' => $products]);
+
+        return response()->json($products);
+    }
+
+    public function category()
+{
+    return $this->belongsTo(Category::class, 'product_category');
+}
+
 
     public function destroy($id)
     {

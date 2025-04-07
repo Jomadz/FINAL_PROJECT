@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Auth;
 
 class SalesController extends Controller
 {
+    // Show the form for creating a sale
+    public function create()
+    {
+        $products = Product::all(); // Retrieve all products to show in the dropdown
+        return view('sales.create', compact('products'));
+    }
+
+    // Store a new sale
     public function store(Request $request)
     {
         // Validate the incoming request data
@@ -47,9 +55,10 @@ class SalesController extends Controller
         return redirect()->route('sales.index')->with('success', 'Sale recorded successfully!');
     }
 
+    // Show all sales of the logged-in user
     public function index()
-{
-    $sales = Sale::where('seller_name', Auth::user()->name)->get(); // Get sales for the logged-in user
-    return view('sales.index', compact('sales'));
-}
+    {
+        $sales = Sale::where('seller_name', Auth::user()->name)->get(); // Get sales for the logged-in user
+        return view('sales.index', compact('sales'));
+    }   
 }

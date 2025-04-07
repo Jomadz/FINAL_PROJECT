@@ -105,7 +105,24 @@
             {{ session('success') }}
         </div>
     @endif
-
+<!--This is the search form i added-->
+    <form method="GET" action="{{ route('admin.seller-activities') }}">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="activity_type">Activity Type</label>
+                <input type="text" class="form-control" id="activity_type" name="activity_type" placeholder="Enter activity type" value="{{ request('activity_type') }}">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="date">Date</label>
+                <input type="date" class="form-control" id="date" name="date" value="{{ request('date') }}">
+            </div>
+            <div class="form-group col-md-4">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary btn-block">Search</button>
+            </div>
+        </div>
+    </form>
+<!--This is the table-->
     <table class="table table-striped">
         <thead>
             <tr>
@@ -119,7 +136,9 @@
             @foreach($activities as $activity)
                 <tr>
                     <td>{{ optional($activity->user)->name }}</td> <!-- Display user name -->
-                    <td>{{ $activity->activity_type }}</td> <!-- Display activity type -->
+
+                    <td>{{ $activity->activity_type }}</td> <!-- Add an if else statement and have a different table for manage product Display activity type -->
+
                     <td>{{ optional($activity->product)->product_name }}</td> <!-- Display product name -->
                     <td>{{ $activity->created_at->format('d/m/Y H:i') }}</td> <!-- Format timestamp -->
                 </tr>

@@ -18,11 +18,15 @@ use App\Http\Controllers\SellerActivityController;
 Route::get('/admin/seller-activities', [SellerActivityController::class, 'index'])->name('admin.seller-activities');
 // Route for the POS interface
 Route::get('/pos', [POSController::class, 'index'])->name('pos.index')->middleware('auth');
+Route::post('/pos/sale', [POSController::class, 'store'])->name('pos.store')->middleware('auth');
+//Route::get('/get-products/{categoryId}', [POSController::class, 'getProductsByCategory']);
+Route::get('/pos/category/{id}/products', [POSController::class, 'showProductsByCategory']);
 
 //sales routes
 Route::middleware(['auth'])->group(function () {
     Route::post('/sales', [SalesController::class, 'store'])->name('sales.store');
     Route::get('/sales/create', [SalesController::class, 'create'])->name('sales.create'); // Add this if you want a separate route for the form
+    Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
 });
 
 
@@ -33,7 +37,7 @@ Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('pr
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
 Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
-
+Route::get('/get-products/{id}', [ProductController::class, 'getProductsByCategory']);
 // Group profile routes under auth middleware
 Route::middleware(['auth'])->group(function () {
     // Show profile information & image upload form
