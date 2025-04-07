@@ -164,11 +164,22 @@
                     <div class="form-group">
                         <label for="product_image">Product Image</label>
                         <input type="file" class="form-control" id="product_image" name="product_image">
-                    </div>
-                    <div class="form-group">
-                        <label for="product_category">Product Category</label>
-                        <input type="text" class="form-control" id="product_category" name="product_category" value="{{ $product->product_category }}">
-                    </div>
+                    
+                        <div>
+    <label for="category">Select Category</label>
+    <select name="product_category" id="category" class="form-control">
+        <option value="">-- Choose Category --</option>
+        @foreach($categories as $category)
+            <option value="{{ $category->id }}">{{ $category->name }}</option>
+        @endforeach
+    </select>
+
+    <br>
+
+    <label for="new_category">Or Add New Category</label>
+    <input type="text" name="new_category" class="form-control" placeholder="Type new category">
+</div>
+
                     <div class="form-group">
                         <label for="product_brand">Product Brand</label>
                         <input type="text" class="form-control" id="product_brand" name="product_brand" value="{{ $product->product_brand }}">
@@ -226,8 +237,8 @@
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-            <a href="{{ route('products.index') }}" class="btn btn-secondary">Back to Products</a>
+            <button type="submit" class="btn btn-primary mb-3">Save Changes</button>
+            <a href="{{ route('products.index') }}" class="btn btn-secondary mb-3">Back to Products</a>
         </form>
     <!--This is the header session-->
    @include('admin.body.footer')

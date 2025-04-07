@@ -113,39 +113,38 @@
 
 
 
-<div class="container">
-    <h1>Record a Sale</h1>
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+<div class="container">
+    <h1>Sales History</h1>
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
         </div>
     @endif
 
-    <form action="{{ route('sales.store') }}" method="POST">
-        @csrf
-        <div class="form-group">
-            <label for="product_id">Product</label>
-            <select name="product_id" id="product_id" class="form-control" required>
-                @foreach($products as $product)
-                    <option value="{{ $product->id }}">{{ $product->product_name }} (SKU: {{ $product->product_sku }})</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="quantity">Quantity</label>
-            <input type="number" name="quantity" id="quantity" class="form-control" required min="1">
-        </div>
-        <div class="form-group">
-            <label for="payment_method">Payment Method</label>
-            <input type="text" name="payment_method" id="payment_method" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Record Sale</button>
-    </form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Payment Method</th>
+                <th>Sale Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($sales as $sale)
+                <tr>
+                    <td>{{ $sale->product->product_name }}</td>
+                    <td>{{ $sale->quantity }}</td>
+                    <td>{{ $sale->total_price }}</td>
+                    <td>{{ $sale->payment_method }}</td>
+                    <td>{{ $sale->sale_time }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 </div>
  <!--This is the header session-->
  @include('admin.body.footer')

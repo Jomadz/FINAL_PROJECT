@@ -142,10 +142,25 @@
                     <label for="product_image">Product Image</label>
                     <input type="file" class="form-control" id="product_image" name="product_image">
                   </div>
-                  <div class="form-group">
-                    <label for="product_category">Product Category</label>
-                    <input type="text" class="form-control" id="product_category" name="product_category">
-                  </div>
+                  <br>
+
+                  <div>
+    <label for="category">Select Category</label>
+    <select name="product_category" id="category" class="form-control">
+        <option value="">-- Choose Category --</option>
+        @foreach($categories as $category)
+            <option value="{{ $category->id }}">{{ $category->name }}</option>
+        @endforeach
+    </select>
+
+ 
+
+    <label for="new_category">Add New Category</label>
+    <input type="text" name="new_category" class="form-control" placeholder="Type new category">
+</div>
+
+<br>
+
                   <div class="form-group">
                     <label for="product_brand">Product Brand</label>
                     <input type="text" class="form-control" id="product_brand" name="product_brand">
@@ -204,6 +219,7 @@
                 </div>
               </div>
               <button type="submit" class="btn btn-primary mb-3">Add Product</button>
+              
               <a href="{{ route('products.index') }}" class="btn btn-secondary mb-3">All Products</a>
             </form>
 

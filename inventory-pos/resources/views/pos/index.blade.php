@@ -1,7 +1,6 @@
- 
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Admin | Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,30 +24,7 @@
 
     <!-- Floating Icons CSS -->
     <style>
-      .floating-icons {
-          position: fixed;
-          top: 50%;
-          left: 0;
-          transform: translateY(-50%);
-          display: flex;
-          flex-direction: column;
-          background-color: rgb(252, 252, 252);
-          border-radius: 5px;
-          padding: 10px;
-          z-index: 1000;
-      }
-
-      .floating-icons .icon {
-          color: black;
-          margin: 10px 0;
-          text-align: center;
-          font-size: 24px;
-          transition: color 0.3s;
-      }
-
-      .floating-icons .icon:hover {
-          color: rgb(109, 106, 106);
-      }
+      
 
       /* Custom Colors */
       .app-sidebar {
@@ -85,147 +61,216 @@
           border-color: #3d3d3d; /* Darker Grey for hover */
       }
     </style>
-  </head>
-  
-  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+</head>
+
+<body>
+    <!-- Header Section (Positioned at the top) -->
+    @include('admin.body.header')
+
     <div class="app-wrapper">
+        <!-- Main Content Section -->
+        <div class="container mt-4">
+            <h1>Point of Sale (POS)</h1>
 
-   <!--This is the header session-->
-@include('admin.body.header')
-     
+            <!-- POS System Layout: Row with 3 Columns (Cart, Calculator, Actions) -->
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- Left: Cart -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">Cart</div>
+                            <div class="card-body" id="cart-items">
+                                <ul class="list-group" id="cart-list"></ul>
+                                <hr>
+                                <strong>Total: <span id="cart-total">0 TSH</span></strong>
+                            </div>
+                        </div>
+                    </div>
 
-      <!--This is the sidebar session-->
-  @include('admin.body.sidebar')
+                    <!-- Middle: Calculator -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">Calculator</div>
+                            <div class="card-body text-center">
+                                <div class="row g-2">
+                                    @for($i = 1; $i <= 9; $i++)
+                                        <div class="col-4">
+                                            <button class="btn btn-success w-100" onclick="addNumber('{{ $i }}')">{{ $i }}</button>
+                                        </div>
+                                    @endfor
+                                    <div class="col-4"><button class="btn btn-success w-100" onclick="addNumber('0')">0</button></div>
+                                    <div class="col-4"><button class="btn btn-warning w-100" onclick="clearInput()">C</button></div>
+                                    <div class="col-4"><button class="btn btn-danger w-100" onclick="deleteLast()">&#x232B;</button></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <!-- Right: Actions -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">Actions</div>
+                            <div class="card-body d-grid gap-2">
+                                <button class="btn btn-primary" onclick="submitSale()">Place Order</button>
+                                <button class="btn btn-secondary">Payment</button>
+                                <button class="btn btn-info">Discount</button>
+                                <button class="btn btn-dark">Print Receipt</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-
- 
-  <div class="container">
-    <h1>Point of Sale (POS)</h1>
-
+                <!-- Bottom: Categories and Products -->
+                <div class="container mt-4">
+    <h2>Categories</h2>
     <div class="row">
-        <div class="col-md-6">
-            <h3>Products</h3>
-            <ul class="list-group">
-                @foreach($products as $product)
-                    <li class="list-group-item">
-                        <strong>{{ $product->name }}</strong> - ${{ $product->price }}
-                        <button class="btn btn-primary btn-sm float-end add-to-cart" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $product->price }}">Add to Cart</button>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
+        @foreach($categories as $category)
+            <div class="col-md-3 mb-3">
+            <div class="card category-card" style="cursor: pointer;" onclick="fetchProducts({{ $category->id }})">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ $category->name }}</h5>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
 
-        <div class="col-md-6">
-            <h3>Cart</h3>
-            <ul class="list-group" id="cart">
-                <!-- Cart items will be dynamically added here -->
-            </ul>
-            <h4>Total: $<span id="total">0.00</span></h4>
-            <button class="btn btn-success" id="checkout">Checkout</button>
-        </div>
+    <h2>Products</h2>
+    <div id="product-container" class="row">
+    
+        <!-- Products will be displayed here -->
     </div>
 </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Section (Positioned at the bottom) -->
+        @include('admin.body.footer')
+    </div>
+
+    <!-- Include your scripts here -->
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-dghWARbRe2eLlIJ56wNB+b760ywulqK3DzZYEpsg2fQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta3/dist/js/adminlte.min.js" crossorigin="anonymous"></script>
 
 
-
-
-
-    
-
-   <!--This is the header session-->
-   @include('admin.body.footer')
-
-  </div>
-
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-dghWARbRe2eLlIJ56wNB+b760ywulqK3DzZYEpsg2fQ=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta3/dist/js/adminlte.min.js" crossorigin="anonymous"></script>
-  <script>
-    const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
-    const Default = {
-      scrollbarTheme: 'os-theme-light',
-      scrollbarAutoHide: 'leave',
-      scrollbarClickScroll: true,
-    };
-    document.addEventListener('DOMContentLoaded', function () {
-      const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
-      if (sidebarWrapper && typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== 'undefined') {
-        OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
-          scrollbars: {
-            theme: Default.scrollbarTheme,
-            autoHide: Default.scrollbarAutoHide,
-            clickScroll: Default.scrollbarClickScroll,
-          },
-        });
-      }
-    });
-  </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const sidebar = document.querySelector('.app-sidebar');
-      const toggleButton = document.querySelector('[data-lte-toggle="sidebar"]');
-
-      toggleButton.addEventListener('click', function () {
-        sidebar.classList.toggle('closed');
-      });
-    });
-  </script>
-
-<script>
-    let cart = [];
-    let total = 0;
-
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
-            const name = this.getAttribute('data-name');
-            const price = parseFloat(this.getAttribute('data-price'));
-
-            // Add to cart
-            cart.push({ id, name, price });
-            total += price;
-
-            // Update cart display
-            updateCart();
-        });
-    });
-
-    function updateCart() {
-        const cartList = document.getElementById('cart');
-        cartList.innerHTML = ''; // Clear current cart
-
-        cart.forEach(item => {
-            const li = document.createElement('li');
-            li.className = 'list-group-item';
-            li.textContent = `${item.name} - $${item.price.toFixed(2)}`;
-            cartList.appendChild(li);
-        });
-
-        document.getElementById('total').textContent = total.toFixed(2);
+    <style>
+   .category-card {
+        transition: background-color 0.3s ease;
+        height: 150px; /* Set a fixed height for the cards */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        cursor: pointer;
     }
 
-    document.getElementById('checkout').addEventListener('click', function() {
-        // Handle checkout logic here
-        alert('Checkout not implemented yet!');
+    .category-card:hover {
+        background-color:rgb(179, 179, 179); /* Change to your desired hover color */
+    }
+
+    .category-card.active {
+        background-color:rgb(4, 22, 42); /* Change to your desired active color */
+        color: white; /* Change text color for better contrast */
+    }
+
+    .product-card {
+        transition: background-color 0.3s ease;
+        height: 150px; /* Set a fixed height for the cards */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .product-card:hover {
+        background-color: #f0f0f0; /* Change to your desired hover color */
+    }
+
+    .product-card.active {
+        background-color:rgb(4, 22, 42); /* Change to your desired active color */
+        color: white; /* Change text color for better contrast */
+    }
+</style>
+    <script>
+    function fetchProducts(categoryId) {
+        fetch(`/pos/category/${categoryId}/products`)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('product-container').innerHTML = html;
+        })
+        .catch(error => console.error('Error fetching products:', error));
+}
+            
+    
+    // Optional: Add click event to product cards to change color
+    document.addEventListener('click', function(event) {
+        if (event.target.closest('.product-card')) {
+            const productCards = document.querySelectorAll('.product-card');
+            productCards.forEach(card => card.classList.remove('active')); // Remove active class from all
+            event.target.closest('.product-card').classList.add('active'); // Add active class to clicked card
+        }
     });
+    document.querySelectorAll('.category-card').forEach(card => {
+    card.classList.remove('active');
+});
+event.target.closest('.category-card').classList.add('active');
+
+
 </script>
+
+
+
+    <script>
+        let currentInput = '';
+        let cart = [];
+        let total = 0;
+
+        function addNumber(num) {
+            currentInput += num;
+            console.log("Current Input: ", currentInput);
+        }
+
+        function clearInput() {
+            currentInput = '';
+            console.log("Input Cleared");
+        }
+
+        function deleteLast() {
+            currentInput = currentInput.slice(0, -1);
+            console.log("Last digit deleted");
+        }
+
+        function submitSale() {
+            // Logic to submit the sale
+            alert("Sale submitted! Total: " + total + " TSH");
+            // Reset cart and total after submission
+            cart = [];
+            total = 0;
+            document.getElementById('cart-list').innerHTML = '';
+            document.getElementById('cart-total').innerText = '0 TSH';
+        }
+
+        function addToCart(productId, productName, productPrice) {
+            cart.push({ id: productId, name: productName, price: productPrice });
+            total += productPrice;
+            document.getElementById('cart-list').innerHTML += `<li class="list-group-item">${productName} - ${productPrice} TSH</li>`;
+            document.getElementById('cart-total').innerText = `${total} TSH`;
+            console.log("Product added to cart: ", productName);
+        }
+
+        // Sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.querySelector('.app-sidebar');
+            const toggleButton = document.querySelector('[data-lte-toggle="sidebar"]');
+
+            toggleButton.addEventListener('click', function () {
+                sidebar.classList.toggle('closed');
+            });
+        });
+    </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
