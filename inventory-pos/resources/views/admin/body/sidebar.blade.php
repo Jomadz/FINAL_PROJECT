@@ -37,30 +37,13 @@
                 </ul>
               </li>
 
-              <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          <i class="nav-icon bi bi-cart-check-fill"></i>
-                          <p>
-                            sales
-                            <i class="nav-arrow bi bi-chevron-right"></i>
-                          </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="{{ route('sales.create') }}" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p>create Sales</p>
-                        </a>
-                      </li>
-                  
                       <li class="nav-item">
                         <a href="{{ route('sales.index') }}" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
+                          <i class="nav-icon bi bi-cart-check-fill"></i>
                           <p> Sales records</p>
                         </a>
                       </li>
-                      </ul>
-                      </li>
+                     
 
               <li class="nav-item">
                 <a href="" class="nav-link">

@@ -25,7 +25,7 @@ class SellerActivityController extends Controller
                 return $query->whereDate('created_at', $date);
             })
             ->orderBy('created_at', 'desc') // Order by date descending
-            ->get();
+            ->paginate(15);
 
         // Return the view with activities
         return view('admin.seller-activities', compact('activities'));

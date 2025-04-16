@@ -21,13 +21,20 @@ Route::get('/pos', [POSController::class, 'index'])->name('pos.index')->middlewa
 Route::post('/pos/sale', [POSController::class, 'store'])->name('pos.store')->middleware('auth');
 //Route::get('/get-products/{categoryId}', [POSController::class, 'getProductsByCategory']);
 Route::get('/pos/category/{id}/products', [POSController::class, 'showProductsByCategory']);
+Route::post('/pos/store', [POSController::class, 'store']);
+Route::post('/pos/submit-sale', [PosController::class, 'store']);
 
 //sales routes
 Route::middleware(['auth'])->group(function () {
     Route::post('/sales', [SalesController::class, 'store'])->name('sales.store');
-    Route::get('/sales/create', [SalesController::class, 'create'])->name('sales.create'); // Add this if you want a separate route for the form
+   
+    Route::post('/record-sale', [SaleController::class, 'processPayment']);
+    
     Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
-});
+
+    Route::get('/sales/{id}/receipt', [SalesController::class, 'showReceipt'])->name('sales.receipt');
+
+});Route::post('/record-sale', [SalesController::class, 'recordSale']);
 
 
 //product routes

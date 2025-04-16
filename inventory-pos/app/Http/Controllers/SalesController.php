@@ -9,56 +9,93 @@ use Illuminate\Support\Facades\Auth;
 
 class SalesController extends Controller
 {
-    // Show the form for creating a sale
-    public function create()
-    {
-        $products = Product::all(); // Retrieve all products to show in the dropdown
-        return view('sales.create', compact('products'));
-    }
+    public function index()
+{
+    // Fetch all sales records from the database
+  
+$sales = Sale::with('product')->get();
 
-    // Store a new sale
-    public function store(Request $request)
+$sales = Sale::with('product')->paginate(20);
+
+
+    // Pass sales data to the view
+    return view('sales.index', compact('sales')); 
+    
+}
+
+    public function processPayment(Request $request)
     {
-        // Validate the incoming request data
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
-            'payment_method' => 'required|string',
+            'payment_method' =>  'required|string|in:cash,bank,mobile money',
         ]);
 
-        // Find the product
-        $product = Product::findOrFail($request->product_id);
+        $product = Product::find($request->product_id);
 
-        // Check if there is enough stock
         if ($product->stock_quantity < $request->quantity) {
-            return redirect()->back()->withErrors(['quantity' => 'Not enough stock available.']);
+            return response()->json(['error' => 'Not enough stock available'], 400);
         }
 
-        // Calculate total price
-        $totalPrice = $product->selling_price * $request->quantity;
+        $total_price = $product->price * $request->quantity;
 
-        // Create a new sale record with the logged-in user's name
-        Sale::create([
-            'product_id' => $product->id,
-            'quantity' => $request->quantity,
-            'total_price' => $totalPrice,
-            'payment_method' => $request->payment_method,
-            'seller_name' => Auth::user()->name, // Automatically use the logged-in user's name
-            'sale_time' => now(), // Store the current time
-        ]);
-
-        // Update product stock
+        // Reduce stock
         $product->stock_quantity -= $request->quantity;
         $product->save();
 
-        // Redirect back with a success message
-        return redirect()->route('sales.index')->with('success', 'Sale recorded successfully!');
+        // Create the sale
+        $sale = Sale::create([
+            'product_id' => $product->id,
+            'quantity' => $request->quantity,
+           'total_price' => $total_price,
+            'payment_method' => $request->payment_method ?? 'Cash',
+            'seller_name' => Auth::user()->name,
+            'sale_time' => now(),
+        ]);
+
+        // Optional: receipt details
+        return view('pos.receipt', [
+            'sale' => $sale,
+            'price_per_unit' => $product->selling_price,
+        ]);
     }
 
-    // Show all sales of the logged-in user
-    public function index()
+    public function recordSale(Request $request)
     {
-        $sales = Sale::where('seller_name', Auth::user()->name)->get(); // Get sales for the logged-in user
-        return view('sales.index', compact('sales'));
-    }   
+        $validatedData = $request->validate([
+            'cart' => 'required|array',
+            'paymentMethod' => 'required|string|in:cash,bank,mobile money',
+        ]);
+
+        // Loop through the cart and save each sale as its own record
+        foreach ($validatedData['cart'] as $item) {
+            $product = Product::find($item['product_id']);
+            if (!$product) {
+                continue; // Skip if product not found
+            }
+            if ($product->stock_quantity < $item['qty']) {
+                return response()->json(['error' => "Insufficient stock for {$product->name}"], 400);
+            }
+
+            // Reduce stock
+            $product->stock_quantity -= $item['qty'];
+            $product->save();
+
+            // Calculate total price
+            $total_price = $item['totalIncl']; // Ensure this is calculated correctly in the cart
+
+
+            // Save each item as a separate sale
+            Sale::create([
+                'product_id' => $product->id,
+                'quantity' => $item['qty'],
+                'total_price' => $item['totalIncl'],
+                'payment_method' => $validatedData['paymentMethod'],
+                'seller_name' => Auth::user()->name,
+                'sale_time' => now(),
+            ]);
+        }
+
+        return response()->json(['success' => true]);
+    }
 }
