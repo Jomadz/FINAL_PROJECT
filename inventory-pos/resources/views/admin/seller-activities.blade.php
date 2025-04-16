@@ -145,6 +145,9 @@
             @endforeach
         </tbody>
     </table>
+    <div class="d-flex justify-content-center">
+    {{ $activities->links('pagination::bootstrap-5') }}
+</div>
 
 </div>
 

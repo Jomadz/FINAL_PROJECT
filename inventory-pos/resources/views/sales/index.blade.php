@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -111,80 +112,86 @@
    <!--This is the header session-->
    @include('admin.body.footer')
 
+  <div class="app-content">
+        <div class="container-fluid">
+          @section('content')
+          
 
+        <div class="container">
+            <h1>Sales History</h1>
 
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-<div class="container">
-    <h1>Sales History</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Product name</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
+                        <th>Payment Method</th>
+                        <th>Sale Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($sales as $sale)
+                        <tr>
+                            <td>{{ $sale->product->product_name }}</td>
+                            <td>{{ $sale->quantity }}</td>
+                            <td>{{ number_format($sale->total_price, 2) }} TSH</td>
+                            <td>{{ $sale->payment_method }}</td>
+                            <td>{{ \Carbon\Carbon::parse($sale->sale_time)->format('Y-m-d H:i:s') }}</td>
 
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+             <!-- Pagination Links -->
+    <div class="d-flex justify-content-center">
+        {{ $sales->links('pagination::bootstrap-5') }}
         </div>
-    @endif
+    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Total Price</th>
-                <th>Payment Method</th>
-                <th>Sale Time</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($sales as $sale)
-                <tr>
-                    <td>{{ $sale->product->product_name }}</td>
-                    <td>{{ $sale->quantity }}</td>
-                    <td>{{ $sale->total_price }}</td>
-                    <td>{{ $sale->payment_method }}</td>
-                    <td>{{ $sale->sale_time }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
- <!--This is the header session-->
- @include('admin.body.footer')
+       
+    </div>
 
-</div>
-
-<!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-dghWARbRe2eLlIJ56wNB+b760ywulqK3DzZYEpsg2fQ=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta3/dist/js/adminlte.min.js" crossorigin="anonymous"></script>
-<script>
-  const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
-  const Default = {
-    scrollbarTheme: 'os-theme-light',
-    scrollbarAutoHide: 'leave',
-    scrollbarClickScroll: true,
-  };
-  document.addEventListener('DOMContentLoaded', function () {
-    const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
-    if (sidebarWrapper && typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== 'undefined') {
-      OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
-        scrollbars: {
-          theme: Default.scrollbarTheme,
-          autoHide: Default.scrollbarAutoHide,
-          clickScroll: Default.scrollbarClickScroll,
-        },
-      });
-    }
-  });
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const sidebar = document.querySelector('.app-sidebar');
-    const toggleButton = document.querySelector('[data-lte-toggle="sidebar"]');
-
-    toggleButton.addEventListener('click', function () {
-      sidebar.classList.toggle('closed');
+    <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-dghWARbRe2eLlIJ56wNB+b760ywulqK3DzZYEpsg2fQ=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta3/dist/js/adminlte.min.js" crossorigin="anonymous"></script>
+  <script>
+    const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+    const Default = {
+      scrollbarTheme: 'os-theme-light',
+      scrollbarAutoHide: 'leave',
+      scrollbarClickScroll: true,
+    };
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+      if (sidebarWrapper && typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== 'undefined') {
+        OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+          scrollbars: {
+            theme: Default.scrollbarTheme,
+            autoHide: Default.scrollbarAutoHide,
+            clickScroll: Default.scrollbarClickScroll,
+          },
+        });
+      }
     });
-  });
-</script>
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebar = document.querySelector('.app-sidebar');
+      const toggleButton = document.querySelector('[data-lte-toggle="sidebar"]');
+
+      toggleButton.addEventListener('click', function () {
+        sidebar.classList.toggle('closed');
+      });
+    });
+  </script>
 </body>
 </html>
