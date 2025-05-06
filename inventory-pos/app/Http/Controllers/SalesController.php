@@ -15,7 +15,7 @@ class SalesController extends Controller
   
 $sales = Sale::with('product')->get();
 
-$sales = Sale::with('product')->paginate(20);
+$sales = Sale::with('product')->paginate(15);
 
 
     // Pass sales data to the view

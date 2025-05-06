@@ -25,7 +25,7 @@ class SellerActivity extends Model
     // Define the relationship with the Product model
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
     

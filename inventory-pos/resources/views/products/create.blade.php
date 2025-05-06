@@ -21,6 +21,7 @@
     
     <!-- ApexCharts -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
     <!-- Floating Icons CSS -->
     <style>
@@ -83,6 +84,9 @@
           background-color: #3d3d3d; /* Darker Grey for hover */
           border-color: #3d3d3d; /* Darker Grey for hover */
       }
+      .kaushan-font {
+            font-family: 'Kaushan Script', cursive;
+        }
     </style>
   </head>
   
@@ -116,7 +120,8 @@
           @section('content')
           
           <div class="container">
-            <h1 class="my-4">Add New Product</h1>
+
+            <h1 class="display-4 fw-bold kaushan-font text-left animated-color">Add Product </h1>
             @if ($errors->any())
         <div class="alert alert-danger">
             <ul>

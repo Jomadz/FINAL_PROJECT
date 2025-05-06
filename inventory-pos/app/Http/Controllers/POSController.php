@@ -41,6 +41,14 @@ class POSController extends Controller
     return response()->json(['success' => true]);
 }
 
+public function showMultipleReceipts($sale_ids)
+{
+    $ids = explode(',', $sale_ids);
+    $sales = Sale::whereIn('id', $ids)->get();
+
+    return view('pos.receipt', ['sales' => $sales]);
+}
+
 
     public function store(Request $request)
     {
@@ -85,7 +93,7 @@ class POSController extends Controller
                     'seller_name' => Auth::user()->name,
                     'sale_time' => now(),
                 ]);
-
+                //return view('pos.receipt', ['sales' => [$sale], 'price_per_unit' => $request->price]);
                 $sales[] = $sale; // Store each sale record
             }
 
@@ -93,9 +101,13 @@ class POSController extends Controller
 
             DB::commit();
 
-            // Return a view to show all sales on the receipt
-            return view('pos.receipt-multiple', ['sales' => $sales]);
-
+            return response()->json([
+                'success' => true,
+                'sales' => $sales,//added this now together with total 
+                'total' => $totalAmount,
+                'redirect' => route('pos.multiple.receipt', ['sale_ids' => implode(',', collect($sales)->pluck('id')->toArray())])
+            ]);
+            
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['message' => 'Error processing sale: ' . $e->getMessage()], 500);

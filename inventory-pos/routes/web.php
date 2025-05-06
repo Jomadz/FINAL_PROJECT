@@ -11,18 +11,24 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\POSController;
 use App\Http\Controllers\SellerActivityController;
+use App\Http\Controllers\ProductOverviewController;
+use App\Http\Controllers\PurchasesController;
 
 
+Route::resource('purchases', PurchasesController::class);
+
+Route::get('/product-overview', [ProductOverviewController::class, 'index'])->name('product.overview');
 
 // Route to display seller activities
 Route::get('/admin/seller-activities', [SellerActivityController::class, 'index'])->name('admin.seller-activities');
 // Route for the POS interface
 Route::get('/pos', [POSController::class, 'index'])->name('pos.index')->middleware('auth');
 Route::post('/pos/sale', [POSController::class, 'store'])->name('pos.store')->middleware('auth');
-//Route::get('/get-products/{categoryId}', [POSController::class, 'getProductsByCategory']);
 Route::get('/pos/category/{id}/products', [POSController::class, 'showProductsByCategory']);
 Route::post('/pos/store', [POSController::class, 'store']);
 Route::post('/pos/submit-sale', [PosController::class, 'store']);
+Route::get('/pos/receipt/multiple/{sale_ids}', [POSController::class, 'showMultipleReceipts'])->name('pos.multiple.receipt');
+Route::get('/pos/receipt/{id}', [PosController::class, 'showReceipt'])->name('pos.receipt');
 
 //sales routes
 Route::middleware(['auth'])->group(function () {
@@ -32,7 +38,7 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
 
-    Route::get('/sales/{id}/receipt', [SalesController::class, 'showReceipt'])->name('sales.receipt');
+  //  Route::get('/sales/{id}/receipt', [SalesController::class, 'showReceipt'])->name('receipt.show');
 
 });Route::post('/record-sale', [SalesController::class, 'recordSale']);
 
@@ -89,6 +95,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::get('/admin/sellers/all', [SellerController::class, 'allSellers'])->name('admin.all-sellers');
 
 Route::get('/admin/sellers/{id}/edit', [SellerController::class, 'edit'])->name('admin.edit-seller');
+
+Route::get('/admin/activities/login-logout', [SellerActivityController::class, 'loginLogoutActivities'])->name('admin.login-logout-activities');
+Route::get('/admin/activities/products', [SellerActivityController::class, 'productActivities'])->name('admin.product-activities');
 
 
 

@@ -292,7 +292,7 @@
                             </a>
                           </li>
                           <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('product.overview') }}" class="nav-link">
                               <i class="nav-icon bi bi-circle"></i>
                               <p>product overview</p>
                             </a>
@@ -313,7 +313,7 @@
 
                       <!-- Purchases -->
                       <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('purchases.index') }}" class="nav-link">
                           <i class="nav-icon bi bi-cart-plus-fill"></i>
                           <p>Purchases</p>
                         </a>
@@ -331,32 +331,37 @@
 
                       @if(auth()->user()->role === 'admin')
 
-
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          <i class="nav-icon bi bi-people-fill"></i>
-                          <p>sellers <i class="nav-arrow bi bi-chevron-right"></i>
-                        </p>
-                        </a>
-                        <ul class="nav nav-treeview">
             <!-- manage Seller -->
             <li class="nav-item">
               <a href="{{ route('admin.create-seller') }}" class="nav-link">
-                <i class="nav-icon bi bi-circle"></i>
+                <i class="nav-icon bi bi-people-fill"></i>
                 <p>Register Seller</p>
               </a>
             </li>
             
-            </li>
+         
             <!-- Seller Activities -->
             <li class="nav-item">
-              <a href="{{ route('admin.seller-activities') }}" class="nav-link">
-                <i class="nav-icon bi bi-circle"></i>
-                <p>Seller Activities</p>
-              </a>
-                      </li>
-                     </ul>
-                   </li>
+                    <a href="#" class="nav-link">
+                      <i class="nav-icon bi bi-activity"></i>
+                      <p> Activities <i class="nav-arrow bi bi-chevron-right"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{ route('admin.login-logout-activities') }}" class="nav-link">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>login/logout activities</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('admin.product-activities') }}" class="nav-link">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>manage product activities</p>
+                    </a>
+                  </li>
+                  </ul>
+                  </li>
+                 
                    @endif
 
                       <!-- Revenue -->

@@ -97,100 +97,86 @@
   @include('admin.body.sidebar')
 
 
-  <div class="container mt-5">
-    <h1>Seller Activities</h1>
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+ 
+@yield('admin')
+
+
+
+
+
+
+    
+
+   <!--This is the header session-->
+   @include('admin.body.footer')
+   <div class="container">
+    <h2 class="text-2xl font-bold mb-4">Purchases</h2>
+
+    {{-- Create button --}}
+    <a href="{{ route('purchases.create') }}" class="btn btn-primary mb-3">
+        <i class="bi bi-plus-circle"></i> Create Purchase
+    </a>
+
+@if($purchases->count())
+<table class="table-auto w-full">
+    <thead class="bg-gray-200">
+        <tr>
+            <th class="p-2">Product</th>
+            <th class="p-2">Quantity</th>
+            <th class="p-2">Price</th>
+            <th class="p-2">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($purchases as $purchase)
+        <tr>
+            <td class="p-2">{{ $purchase->product->product_name }}</td>
+            <td class="p-2">{{ $purchase->quantity }}</td>
+            <td class="p-2">{{ $purchase->cost_price }}</td>
+            <td class="p-2">{{ $purchase->created_at->format('Y-m-d') }}</td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+@else
+        <p>No purchases recorded yet.</p>
     @endif
-<!--This is the search form i added-->
-    <form method="GET" action="{{ route('admin.seller-activities') }}">
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                <label for="activity_type">Activity Type</label>
-                <input type="text" class="form-control" id="activity_type" name="activity_type" placeholder="Enter activity type" value="{{ request('activity_type') }}">
-            </div>
-            <div class="form-group col-md-4">
-                <label for="date">Date</label>
-                <input type="date" class="form-control" id="date" name="date" value="{{ request('date') }}">
-            </div>
-            <div class="form-group col-md-4">
-                <label>&nbsp;</label>
-                <button type="submit" class="btn btn-primary btn-block">Search</button>
-            </div>
-        </div>
-    </form>
-<!--This is the table-->
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>User</th>
-                <th>Activity Type</th>
-                <th>Product Name</th>
-                <th>Timestamp</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($activities as $activity)
-                <tr>
-                    <td>{{ optional($activity->user)->name }}</td> <!-- Display user name -->
-
-                    <td>{{ $activity->activity_type }}</td> <!-- Add an if else statement and have a different table for manage product Display activity type -->
-
-                    <td>{{ optional($activity->product)->product_name }}</td> <!-- Display product name -->
-                    <td>{{ $activity->created_at->format('d/m/Y H:i') }}</td> <!-- Format timestamp -->
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-    <div class="d-flex justify-content-center">
-    {{ $activities->links('pagination::bootstrap-5') }}
 </div>
-
-</div>
-
-<!--This is the header session-->
-@include('admin.body.footer')
-
-
-</div>
-
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-dghWARbRe2eLlIJ56wNB+b760ywulqK3DzZYEpsg2fQ=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta3/dist/js/adminlte.min.js" crossorigin="anonymous"></script>
-<script>
-  const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
-  const Default = {
-    scrollbarTheme: 'os-theme-light',
-    scrollbarAutoHide: 'leave',
-    scrollbarClickScroll: true,
-  };
-  document.addEventListener('DOMContentLoaded', function () {
-    const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
-    if (sidebarWrapper && typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== 'undefined') {
-      OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
-        scrollbars: {
-          theme: Default.scrollbarTheme,
-          autoHide: Default.scrollbarAutoHide,
-          clickScroll: Default.scrollbarClickScroll,
-        },
-      });
-    }
-  });
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const sidebar = document.querySelector('.app-sidebar');
-    const toggleButton = document.querySelector('[data-lte-toggle="sidebar"]');
-
-    toggleButton.addEventListener('click', function () {
-      sidebar.classList.toggle('closed');
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta3/dist/js/adminlte.min.js" crossorigin="anonymous"></script>
+  <script>
+    const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+    const Default = {
+      scrollbarTheme: 'os-theme-light',
+      scrollbarAutoHide: 'leave',
+      scrollbarClickScroll: true,
+    };
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+      if (sidebarWrapper && typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== 'undefined') {
+        OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+          scrollbars: {
+            theme: Default.scrollbarTheme,
+            autoHide: Default.scrollbarAutoHide,
+            clickScroll: Default.scrollbarClickScroll,
+          },
+        });
+      }
     });
-  });
-</script>
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebar = document.querySelector('.app-sidebar');
+      const toggleButton = document.querySelector('[data-lte-toggle="sidebar"]');
+
+      toggleButton.addEventListener('click', function () {
+        sidebar.classList.toggle('closed');
+      });
+    });
+  </script>
 </body>
 </html>
