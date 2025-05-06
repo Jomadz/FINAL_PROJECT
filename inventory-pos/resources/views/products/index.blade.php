@@ -105,6 +105,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Product</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
         .form-control {
             border-radius: 0.25rem;
@@ -131,6 +132,9 @@
             background-color: #3d3d3d; /* Darker Grey for hover */
             border-color: #3d3d3d; /* Darker Grey for hover */
         }
+        .kaushan-font {
+            font-family: 'Kaushan Script', cursive;
+        }
     </style>
 </head>
 
@@ -138,7 +142,7 @@
     
 <body>
     <div class="container mt-5">
-        <h2 class="mt-5">Existing Products</h2>
+    <h1 class="display-4 fw-bold kaushan-font text-center animated-color">Existing products </h1>
         
         <!-- Add Product Button -->
         <a href="{{ route('products.create') }}" class="btn btn-primary mb-3">Add Product</a>

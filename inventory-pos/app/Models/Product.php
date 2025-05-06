@@ -50,5 +50,10 @@ public function sales()
     {
         return $this->hasMany(Sale::class);
     }
-    // Remove the Spatie Activitylog logic, as we're handling this via event listeners.
+   
+    //public function sellerActivities()
+   // {
+     //   return $this->hasMany(SellerActivity::class);
+   // }
+    
 }

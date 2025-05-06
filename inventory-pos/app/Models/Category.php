@@ -17,10 +17,10 @@ class Category extends Model
         return $this->hasMany(Product::class, 'product_category');
     }
 }
-class Product extends Model 
-{ 
-    public function categories() 
-    { 
-        return $this->belongsToMany(Category::class); 
-    } 
-}
+//class Product extends Model 
+//{ 
+  //  public function categories() 
+  //  { 
+     //   return $this->belongsToMany(Category::class); 
+    //} 
+//}

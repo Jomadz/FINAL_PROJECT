@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product; // Make sure to import the Product model
+use App\Models\Product; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\SellerActivity; // Import the SellerActivity model
+use App\Models\SellerActivity; 
 use App\Models\Category;
+use App\Models\Purchases; 
 
 class ProductController extends Controller
 {
@@ -19,8 +20,9 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+
         // Validate the incoming request data
-        $request->validate([
+        $data = $request->validate([
             'product_name' => 'required|string|max:255|unique:products,product_name',
             'product_description' => 'nullable|string',
             'product_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -87,6 +89,12 @@ class ProductController extends Controller
             'user_id' => Auth::id(),
             'activity_type' => 'product_added',
             'product_id' => $product->id, // Associate the product ID
+        ]);
+
+        Purchases::create([
+            'product_id' => $product->id,
+            'quantity'   => $data['stock_quantity'],
+            'cost_price' => $data['cost_price'],
         ]);
 
         // Redirect back with a success message
@@ -171,7 +179,7 @@ class ProductController extends Controller
         // Log the product update activity
         SellerActivity::create([
             'user_id' => Auth::id(),
-            'activity_type' => 'product_updated',
+            'activity_type' => 'product_edited',
             'product_id' => $product->id, // Associate the product ID
         ]);
 
