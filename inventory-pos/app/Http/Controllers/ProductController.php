@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\SellerActivity; 
 use App\Models\Category;
-use App\Models\Purchases; 
+use App\Models\Purchase; 
+use App\Models\Expense;
 
 class ProductController extends Controller
 {
@@ -91,20 +92,38 @@ class ProductController extends Controller
             'product_id' => $product->id, // Associate the product ID
         ]);
 
-        Purchases::create([
+        Purchase::create([
             'product_id' => $product->id,
             'quantity'   => $data['stock_quantity'],
             'cost_price' => $data['cost_price'],
         ]);
 
+        Expense::create([
+            'product_id' => $purchase->product_id,
+            'amount' => $purchase->cost_price * $purchase->quantity, // expense based on price * quantity
+            'source' => 'purchase',        // Indicating this expense is related to a purchase
+            'user_id' => auth()->id(),     // Logged-in user
+        ]);
+
         // Redirect back with a success message
         return redirect()->route('products.create')->with('success', 'Product added successfully!');
     }
-
-    public function index()
+    
+    public function index(Request $request)
     {
-        $products = Product::with(['creator', 'updater'])->get();
-        return view('products.index', compact('products')); // Return the view with products
+        $selectedCategory = $request->input('category');
+        $categories = Category::all();
+    
+        $productsQuery = Product::with(['creator', 'updater']);
+    
+        if ($selectedCategory) {
+            $productsQuery->where('product_category', $selectedCategory);
+        }
+    
+        $products = $productsQuery->paginate(20);
+        
+       
+        return view('products.index', compact('products', 'categories', 'selectedCategory'));
     }
 
     public function edit($id)

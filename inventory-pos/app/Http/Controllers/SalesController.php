@@ -4,24 +4,41 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class SalesController extends Controller
 {
-    public function index()
-{
-    // Fetch all sales records from the database
-  
-$sales = Sale::with('product')->get();
-
-$sales = Sale::with('product')->paginate(15);
-
-
-    // Pass sales data to the view
-    return view('sales.index', compact('sales')); 
+    public function index(Request $request)
+    {
+        $query = Sale::query();
     
-}
+    // Fetch all users for the dropdown list
+    $users = User::all();
+    
+        // Filter by product name if provided
+        if ($request->has('product_name') && $request->product_name) {
+            $query->whereHas('product', function($q) use ($request) {
+                $q->where('product_name', 'like', '%' . $request->product_name . '%');
+            });
+        }
+    // Filter by seller name if provided
+    if ($request->has('seller_name') && $request->input('seller_name') !== '') {
+        $query->where('seller_name', 'like', '%' . $request->input('seller_name') . '%');
+    }
+    
+        // Filter by sale time if provided
+        if ($request->has('sale_time') && $request->sale_time) {
+            $query->whereDate('created_at', $request->sale_time);
+        }
+    
+        // Paginate results (optional)
+        $sales = $query->paginate(10);
+    
+        return view('sales.index', compact('sales', 'users'));
+    }
+    
 
     public function processPayment(Request $request)
     {

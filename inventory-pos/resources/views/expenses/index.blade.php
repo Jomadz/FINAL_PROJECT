@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -135,89 +134,58 @@
         .kaushan-font {
             font-family: 'Kaushan Script', cursive;
         }
-        .pagination .page-link {
-    background-color: #0a1f44 !important;
-    border-color:rgb(249, 249, 249) !important;
-}
-       
     </style>
 </head>
 
 
     
 <body>
-    <div class="container mt-10">
-    <h1 class="display-4 fw-bold kaushan-font text-center animated-color">Existing products </h1>
+    <div class="container mt-5">
+    <h1 class="display-4 fw-bold kaushan-font text-center animated-color">Expenses </h1>
         
-        <!-- Add Product Button -->
-        <a href="{{ route('products.create') }}" class="btn btn-primary mb-3">Add Product</a>
 
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>SKU</th>
-                    <th>Image</th>
-                    <th>Price</th> 
-                    <th>Expiry Date</th>
-                    <th>Created By</th>
-                <th>Last Updated By</th>
-                <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($products as $product)
-                    <tr>
-                        <td>{{ $product->product_name }}</td>
-                        <td>{{ $product->product_sku }}</td>
-                        <td>
-                        @if($product->product_image)
+    <table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Product Name</th>
+        <th>Source</th>
+        <th>Amount</th>
+        <th>Purchased By</th>
+        <th>Date</th>
+    </tr>
+</thead>
+<tbody>
+    @forelse($expenses as $expense)
+        <tr>
+        <td>{{ $expense->product?->product_name ?? 'Unknown Product' }}</td>
+                <td>{{ ucfirst($expense->source) }}</td>
+                <td>{{ number_format($expense->amount, 2) }}</td>
+                <td>{{ $expense->user?->name ?? 'Unknown User' }}</td>
+                <td>{{ $expense->created_at->format('Y-m-d') }}</td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="5">No expenses found.</td>
+            </tr>
+        @endforelse
+    </tbody>
 
-                        <img src="{{ asset('storage/' . $product->product_image) }}" alt="{{ $product->product_name }}"style="width: 50px; height: 50px; border-radius: 40%; object-fit: cover;">
 
-                        @else
-                           no image
-                        @endif
-                    </td>
-                    <td>{{ $product->selling_price }}</td>
-                    <td>{{ $product->expiry_date }}</td>
-                    
-                        <td>{{ $product->creator ? $product->creator->name : 'N/A' }}</td>
-                        <td>{{ $product->updater ? $product->updater->name : 'N/A' }}</td>
-                        
-                        
-            <td>
-                            <!-- Edit Action -->
-                            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                            
-                            <!-- Delete Action -->
-                            <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this product?');">Delete</button>
-                            </form>
-                        </td>
-                      
-                    </tr>
-                @endforeach
-           
-        </table>
-        <!-- Pagination Links -->
- <div class="d-flex justify-content-center">
-        {{ $products->links('pagination::bootstrap-5') }}
-        </div>
-  </div>
+
+        <!-- Total Row -->
+        <tr style="font-weight: bold; background-color: #f0f0f0;">
+            <td colspan="2">Total Expenses</td>
+            <td>{{ number_format($totalExpenses, 2) }}</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
     </div>
-   <!--This is the header session-->
-   @include('admin.body.footer')
+  <!--This is the header session-->
+  @include('admin.body.footer')
 
-</div>
+
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-dghWARbRe2eLlIJ56wNB+b760ywulqK3DzZYEpsg2fQ=" crossorigin="anonymous"></script>

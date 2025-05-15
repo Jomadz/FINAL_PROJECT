@@ -21,7 +21,7 @@
     
     <!-- ApexCharts -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css" crossorigin="anonymous" />
-
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <!-- Floating Icons CSS -->
     <style>
       .floating-icons {
@@ -83,6 +83,9 @@
           background-color: #3d3d3d; /* Darker Grey for hover */
           border-color: #3d3d3d; /* Darker Grey for hover */
       }
+      .kaushan-font {
+            font-family: 'Kaushan Script', cursive;
+        }
     </style>
     <!-- Select2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -110,9 +113,12 @@
 @yield('admin')
 <!--This is the header session-->
 @include('admin.body.footer')
-
+<div class="app-content">
+        <div class="container-fluid">
+          @section('content')
+          
 <div class="container">
-   <h2 class="text-lg font-semibold mb-4">Create Purchase</h2>
+   <h2 class=" display-4 fw-bold kaushan-font text-center animated-color mb-4">Create Purchase</h2>
 
 <form action="{{ route('purchases.store') }}" method="POST">
 @csrf

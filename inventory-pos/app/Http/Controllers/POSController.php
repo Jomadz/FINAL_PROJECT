@@ -41,10 +41,10 @@ class POSController extends Controller
     return response()->json(['success' => true]);
 }
 
-public function showMultipleReceipts($sale_ids)
+public function receipt($sale_ids)
 {
     $ids = explode(',', $sale_ids);
-    $sales = Sale::whereIn('id', $ids)->get();
+    $sales = Sale::whereIn('id', $ids)->with('product')->get();
 
     return view('pos.receipt', ['sales' => $sales]);
 }
@@ -105,7 +105,7 @@ public function showMultipleReceipts($sale_ids)
                 'success' => true,
                 'sales' => $sales,//added this now together with total 
                 'total' => $totalAmount,
-                'redirect' => route('pos.multiple.receipt', ['sale_ids' => implode(',', collect($sales)->pluck('id')->toArray())])
+                'redirect' => route('pos.receipt', ['sale_ids' => implode(',', collect($sales)->pluck('id')->toArray())])
             ]);
             
         } catch (\Exception $e) {

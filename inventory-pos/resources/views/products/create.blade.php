@@ -205,6 +205,16 @@
         <input type="number" step="0.01" class="form-control" id="selling_price" name="selling_price" min="0" required>
     </div>
     <div class="form-group">
+    <label for="expiry_date">Expiry Date</label>
+    <input type="date" class="form-control" id="expiry_date" name="expiry_date" value="" min="" required>
+</div>
+
+<script>
+    // Set the minimum date to today's date
+    document.getElementById('expiry_date').setAttribute('min', new Date().toISOString().split('T')[0]);
+</script>
+
+    <div class="form-group">
         <label for="discount">Discount</label>
         <input type="number" step="0.01" class="form-control" id="discount" name="discount" value="0" min="0" required>
     </div>

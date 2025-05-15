@@ -321,7 +321,7 @@
               
                       <!-- Expences -->
                       <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('expenses.index') }}" class="nav-link">
                           <i class="nav-icon bi bi-cash-coin"></i>
                           <p>Expenses</p>
                         </a>
@@ -368,18 +368,11 @@
                       <li class="nav-item">
                         <a href="#" class="nav-link">
                           <i class="nav-icon bi bi-graph-up"></i>
-                          <p>Revenue</p>
+                          <p>Balance_sheet</p>
                         </a>
                       </li>
               
-                      <!-- Charts -->
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          <i class="nav-icon bi bi-bar-chart-line-fill"></i>
-                          <p>Charts</p>
-                        </a>
-                      </li>
-              
+                     
                       
                     </ul>
                     <!--end::Sidebar Menu--> 
