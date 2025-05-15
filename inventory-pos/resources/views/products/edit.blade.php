@@ -23,6 +23,7 @@
     
     <!-- ApexCharts -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
     <!-- Floating Icons CSS -->
     <style>
@@ -85,10 +86,16 @@
           background-color: #3d3d3d; /* Darker Grey for hover */
           border-color: #3d3d3d; /* Darker Grey for hover */
       }
+      .kaushan-font {
+            font-family: 'Kaushan Script', cursive;
+        }
     </style>
   </head>
   
-  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+ 
+
+
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <div class="app-wrapper">
 
    <!--This is the header session-->
@@ -101,42 +108,26 @@
 
 
  
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Product</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .form-control {
-            border-radius: 0.25rem;
-        }
+@yield('admin')
 
-        .btn-primary {
-            background-color: #001f3f; /* Dark Navy for Save */
-            border-color: #001f3f; /* Dark Navy for Save */
-            color: white; /* White text for button */
-        }
 
-        .btn-primary:hover {
-            background-color: #001a33; /* Darker Navy for hover */
-            border-color: #001a33; /* Darker Navy for hover */
-        }
 
-        .btn-danger {
-            background-color: #4b4b4b; /* Dark Grey for Delete */
-            border-color: #4b4b4b; /* Dark Grey for Delete */
-            color: white; /* White text for delete button */
-        }
 
-        .btn-danger:hover {
-            background-color: #3d3d3d; /* Darker Grey for hover */
-            border-color: #3d3d3d; /* Darker Grey for hover */
-        }
-    </style>
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Edit Product</h1>
+
+
+    
+
+   <!--This is the header session-->
+   @include('admin.body.footer')
+
+  <div class="app-content">
+        <div class="container-fluid">
+          @section('content')
+          
+          <div class="container">
+   
+
+        <h1 class="display-4 fw-bold kaushan-font text-left animated-color">Edit Product</h1>
         
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -163,7 +154,8 @@
                     </div>
                     <div class="form-group">
                         <label for="product_image">Product Image</label>
-                        <input type="file" class="form-control" id="product_image" name="product_image">
+                        <input type="file" class="form-control" id="product_image" name="product_image"></div>
+                        <br>
                     
                         <div>
     <label for="category">Select Category</label>
@@ -173,12 +165,10 @@
             <option value="{{ $category->id }}">{{ $category->name }}</option>
         @endforeach
     </select>
-
-    <br>
-
+   
     <label for="new_category">Or Add New Category</label>
     <input type="text" name="new_category" class="form-control" placeholder="Type new category">
-</div>
+</div><br>
 
                     <div class="form-group">
                         <label for="product_brand">Product Brand</label>
@@ -220,6 +210,16 @@
                         <input type="number" step="0.01" class="form-control" id="selling_price" name="selling_price" value="{{ $product->selling_price }}" min="0" required>
                     </div>
                     <div class="form-group">
+    <label for="expiry_date">Expiry Date</label>
+    <input type="date" class="form-control" id="expiry_date" name="expiry_date" value="" min="" required>
+</div>
+
+<script>
+    // Set the minimum date to today's date
+    document.getElementById('expiry_date').setAttribute('min', new Date().toISOString().split('T')[0]);
+</script>
+
+                    <div class="form-group">
                         <label for="discount">Discount</label>
                         <input type="number" step="0.01" class="form-control" id="discount" name="discount" value="{{ $product->discount }}" min="0" required>
                     </div>
@@ -227,6 +227,7 @@
                         <label for="tax_rate">Tax Rate (%)</label>
                         <input type="number" step="0.01" class="form-control" id="tax_rate" name="tax_rate" value="{{ $product->tax_rate }}" min="0" required>
                     </div>
+    </div>
                     <div class="form-group">
                         <label for="product_status">Product Status</label>
                         <select class="form-control" id="product_status" name="product_status">
@@ -236,12 +237,11 @@
                         </select>
                     </div>
                 </div>
-            </div>
+            </div><br>
             <button type="submit" class="btn btn-primary mb-3">Save Changes</button>
             <a href="{{ route('products.index') }}" class="btn btn-secondary mb-3">Back to Products</a>
         </form>
-    <!--This is the header session-->
-   @include('admin.body.footer')
+    
 
 </div>
 

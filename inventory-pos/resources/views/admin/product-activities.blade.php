@@ -83,6 +83,10 @@
           background-color: #3d3d3d; /* Darker Grey for hover */
           border-color: #3d3d3d; /* Darker Grey for hover */
       }
+      .pagination .page-link {
+    background-color: #0a1f44 !important;
+    border-color:rgb(249, 249, 249) !important;
+      }
     </style>
   </head>
   

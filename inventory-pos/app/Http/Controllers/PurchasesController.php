@@ -1,15 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Purchases;
+use App\Models\Purchase;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\Expense;
 
 class PurchasesController extends Controller
 {
     public function index()
 {
-    $purchases = Purchases::with('product')->latest()->get();
+    $purchases = Purchase::with('product')
+    ->orderBy('created_at', 'desc')
+        ->paginate(20); 
     return view('purchases.index', compact('purchases'));
 }
 
@@ -33,7 +36,18 @@ public function store(Request $request)
     $product->cost_price = $request->cost_price; // Optional
     $product->save();
 
-    Purchases::create($request->all());
+    $purchase = Purchase::create([
+        'product_id' => $request->product_id,
+        'quantity' => $request->quantity,
+        'cost_price' => $request->cost_price,
+    ]);
+
+    Expense::create([
+        'product_id' => $purchase->product_id,
+        'amount' => $purchase->cost_price * $purchase->quantity, // expense based on price * quantity
+        'source' => 'purchase',        // Indicating this expense is related to a purchase
+        'user_id' => auth()->id(),     // Logged-in user
+    ]);
 
     return redirect()->route('purchases.index')->with('success', 'Purchase recorded successfully.');
 }

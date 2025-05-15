@@ -21,7 +21,7 @@
     
     <!-- ApexCharts -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css" crossorigin="anonymous" />
-
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <!-- Floating Icons CSS -->
     <style>
       .floating-icons {
@@ -83,6 +83,10 @@
           background-color: #3d3d3d; /* Darker Grey for hover */
           border-color: #3d3d3d; /* Darker Grey for hover */
       }
+      .kaushan-font {
+            font-family: 'Kaushan Script', cursive;
+        }
+       
     </style>
   </head>
   
@@ -112,60 +116,70 @@
    @include('admin.body.footer')
 
 
+   <div class="app-content">
+        <div class="container-fluid">
+          @section('content')
 
-<div class="container mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-6">📊 Product Overview Dashboard</h1>
-    <form method="GET" action="{{ route('product.overview') }}" class="mb-6 flex flex-wrap gap-4 items-end">
-    <div>
-        <label for="start_date" class="block font-medium">Start Date</label>
-        <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" class="border p-2 rounded">
-    </div>
-    <div>
-        <label for="end_date" class="block font-medium">End Date</label>
-        <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" class="border p-2 rounded">
-    </div>
-    <div>
-    <label for="category" class="block font-medium">Category</label>
-<select name="category" id="category" class="border p-2 rounded">
-    <option value="">All Categories</option>
-    @foreach ($categories as $id => $name)
-        <option value="{{ $id }}" @selected($id == request('category'))>{{ $name }}</option>
-    @endforeach
-</select>
+   <div class="container mx-auto p-6">
+    <h1 class="display-4 fw-bold kaushan-font text-left animated-color"> Product Overview </h1>
+    <form method="GET" action="{{ route('product.overview') }}" class="form-row mb-3 d-flex flex-wrap align-items-center">
+        <!-- First Row with Inputs -->
+        <div class="flex-grow-1 mr-2 mb-2">
+            <label for="start_date" class="block font-medium">Start Date</label>
+            <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" class="border p-2 rounded">
+        </div>
+        <div class="flex-grow-1 mr-2 mb-2">
+            <label for="end_date" class="block font-medium">End Date</label>
+            <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" class="border p-2 rounded">
+        </div>
+        <div class="flex-grow-1 mr-2 mb-2">
+            <label for="category" class="block font-medium">Category</label>
+            <select name="category" id="category" class="border p-2 rounded">
+                <option value="">All Categories</option>
+                @foreach ($categories as $id => $name)
+                    <option value="{{ $id }}" @selected($id == request('category'))>{{ $name }}</option>
+                @endforeach
+            </select>
+        </div>
 
-    </div>
-    <div>
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Filter</button>
-    </div>
-</form>
+        <!-- Filter Button on a New Line -->
+        <div class="w-full mt-3">
+            <button type="submit" class="bg-bg-primary text px-4 py-2 rounded w-full">Filter</button>
+        </div>
+    </form>
+</div>
+   
 
     {{-- Top 3 Most Sold Products --}}
-    <div class="mb-10">
-        <h2 class="text-xl font-semibold mb-2">Top 3 Most Sold Products</h2>
+    <div class="mb-16">
+        <h2 class="text-xl  kaushan-font text-right  mb-6">Top 3 Most Sold Products</h2>
         <div id="topProductsChart"></div>
-    </div>
+    </div><br>
 
     {{-- Least Sold Products (Pie) --}}
     <div class="mb-10">
-        <h2 class="text-xl font-semibold mb-2">Least Sold Products</h2>
-        <div id="leastProductsChart"></div>
-    </div>
+        <h2 class="text-xl kaushan-font text-right mb-2">Least Sold Products</h2>
+        <div style="display: flex; justify-content: center; align-items: center; ">
+        <div id="leastProductsChart"  style="width: 600px; height: 300px;"></div>
+    </div><br>
 
     {{-- Sales Trends Over Time --}}
     <div class="mb-10">
-        <h2 class="text-xl font-semibold mb-2">Sales Trends Over Time</h2>
+        <h2 class="text-xl  kaushan-font text-right mb-2">Sales Trends Over Time</h2>
         <div id="salesTrendsChart"></div>
-    </div>
+    </div><br>
 
     {{-- Stock Levels by Category --}}
     <div class="mb-10">
-        <h2 class="text-xl font-semibold mb-2">Stock Levels by Category</h2>
+        <h2 class="text-xl  kaushan-font text-right mb-2">Stock Levels by Category</h2>
         <div id="stockByCategoryChart"></div>
-    </div>
+        <div id="categoryLegend" style="margin-top: 10px;"></div>
+
+    </div><br>
 
     {{-- Reorder Points Table --}}
     <div class="mb-10">
-        <h2 class="text-xl font-semibold mb-2">Reorder Points</h2>
+        <h2 class="text-xl  kaushan-font text-right mb-2">Reorder Points</h2>
         <table class="w-full table-auto border">
             <thead>
                 <tr class="bg-gray-200">
@@ -185,13 +199,13 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
+    </div><br>
 
     {{-- Expiring Products Table --}}
 <div class="mb-10">
-    <h2 class="text-xl font-semibold mb-2 text-red-600">⚠️ Products Expiring Within a Month</h2>
+    <h2 class="text-xl  kaushan-font text-right mb-2 text-red-600">⚠️ Products Expiring Within a Month</h2>
     @if($expiringProducts->isEmpty())
-        <p class="text-gray-500">No products expiring within the next 30 days.</p>
+        <p class=" kaushan-font text-right text-gray-500">No products expiring within the next 30 days.</p>
     @else
         <table class="w-full table-auto border">
             <thead>
@@ -214,11 +228,11 @@
             </tbody>
         </table>
     @endif
-</div>
+</div><br>
 
     {{-- Sales by Category --}}
     <div class="mb-10">
-        <h2 class="text-xl font-semibold mb-2">Sales by Category</h2>
+        <h2 class="text-xl  kaushan-font text-right mb-2">Sales by Category</h2>
         <div id="salesByCategoryChart"></div>
     </div>
 </div>
@@ -226,36 +240,91 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     // Top 3 Most Sold Products
+    let topSeries = @json($topProducts->pluck('total_sold'));
+    let topLabels = @json($topProducts->pluck('product_name'));
+
+    console.log("Series:", topSeries);
+    console.log("Labels:", topLabels);
+
+    let pieColors = ['#001a33', '#006747', '#B8860B'];
+
+    // Initialize the chart
     var topProductsChart = new ApexCharts(document.querySelector("#topProductsChart"), {
-        chart: { type: 'bar', 
-            height: 250,
-        width: '50%' 
+        chart: {
+            type: 'donut',
+            height: 300
         },
-        series: [{
-            name: 'Units Sold',
-            data: @json($topProducts->pluck('total_sold'))
+        series: topSeries,
+        labels: topLabels,
+        colors: pieColors, 
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: '100%'
+                },
+                legend: {
+                    position: 'top'
+                }
+            }
         }],
-        xaxis: {
-            categories: @json($topProducts->pluck('product_name'))
+        // Ensure the pie chart covers the full space and adjusts properly
+        plotOptions: {
+            pie: {
+                donut: {
+                    size: '60%' // This gives a donut-style pie chart. You can adjust the size to make it more circular.
+                }
+            }
+        },
+        legend: {
+            show: true // Hides the legend
+        },
+        // Ensure the chart adjusts to different numbers of products
+        noData: {
+            text: 'No data available'
         }
     });
+
+    // Render the chart
     topProductsChart.render();
+    
+    
 
     // Least Sold Products
     var leastProductsChart = new ApexCharts(document.querySelector("#leastProductsChart"), {
-        chart: { type: 'bar', 
-            height: 250, 
-        width: '50%' 
-        },
-        series: [{
+    chart: {
+        type: 'bar',
+        height: 300,
+        width: '100%'
+    },
+    series: [{
         name: 'Units Sold',
         data: @json($leastProducts->pluck('total_sold'))
     }],
     xaxis: {
         categories: @json($leastProducts->pluck('product_name'))
+    },
+    grid: {
+        show: true // Set to false to hide background/grid lines
+    },
+    plotOptions: {
+        bar: {
+            distributed: true,
+            borderRadius: 4,
+            horizontal: false,
+        }
+    },
+    colors: ['#B8860B', '#FF5733', '#006747'],
+    dataLabels: {
+        enabled: true
+    },
+    legend: {
+        show: false // ✅ Correct placement
     }
-    });
-    leastProductsChart.render();
+});
+
+leastProductsChart.render();
+
 
     // Sales Trends Line Chart
     var salesTrendsChart = new ApexCharts(document.querySelector("#salesTrendsChart"), {
@@ -269,32 +338,107 @@
         }],
         xaxis: {
             categories: @json($salesTrends->pluck('date'))
-        }
+        },
+        colors: ['#001a33'],
+        grid: {
+        show: false // Set to false to hide background/grid lines
+    }
     });
     salesTrendsChart.render();
 
     // Stock Levels by Category (Stacked Bar)
     var stockByCategoryData = @json($stockByCategory);
-    var stockCategories = Object.keys(stockByCategoryData);
-    var stockSeries = stockCategories.map(category => {
-        return {
-            name: category,
-            data: stockByCategoryData[category].map(item => item.stock_quantity)
-        }
-    });
-    var stockNames = stockCategories.flatMap(category =>
-        stockByCategoryData[category].map(item => item.product_name)
-    );
 
-    var stockChart = new ApexCharts(document.querySelector("#stockByCategoryChart"), {
-        chart: { type: 'bar',  
-            height: 250, 
-            width: '50%',
-            stacked: true },
-        series: stockSeries,
-        xaxis: { categories: stockNames }
+// Flatten the data: [{product_name, stock_quantity, category}]
+var products = [];
+Object.entries(stockByCategoryData).forEach(([category, items]) => {
+    items.forEach(item => {
+        products.push({
+            product_name: item.product_name,
+            stock_quantity: item.stock_quantity,
+            category: category
+        });
     });
-    stockChart.render();
+});
+
+// Define a function to generate random colors for new categories
+function generateRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+// Create an object to store category colors
+var categoryColors = {};
+
+
+
+// Assign colors for any new categories dynamically
+Object.keys(stockByCategoryData).forEach(category => {
+    if (!categoryColors[category]) {
+        categoryColors[category] = generateRandomColor();  // Generate a random color for new categories
+    }
+});
+
+// Get data for chart
+var productNames = products.map(p => p.product_name);
+var stockQuantities = products.map(p => p.stock_quantity);
+
+// Map colors based on categories
+var barColors = products.map(p => categoryColors[p.category]);  // Use category color for each product
+
+
+// Create a legend for categories with their respective colors
+var categoryLegendHtml = '<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">';
+Object.entries(categoryColors).forEach(([category, color]) => {
+    categoryLegendHtml += `
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <span style="background-color: ${color}; width: 15px; height: 15px; display: inline-block; border-radius: 3px;"></span>
+            <span style="font-size: 14px;">${category}</span>
+        </div>`;
+});
+categoryLegendHtml += '</div>';
+document.getElementById('categoryLegend').innerHTML = categoryLegendHtml;
+
+var stockChart = new ApexCharts(document.querySelector("#stockByCategoryChart"), {
+    chart: {
+        type: 'bar',
+        height: 300,
+    },
+    series: [{
+        name: 'Stock Quantity',
+        data: stockQuantities
+    }],
+    xaxis: {
+        categories: productNames, // Product names will remain on the x-axis
+        labels: {
+            rotate: -45
+        }
+    },
+    colors: barColors, // Apply category colors to the bars
+    plotOptions: {
+        bar: {
+            distributed: true,
+            horizontal: false // Bars will now be colored by category
+        }
+    },
+    tooltip: {
+        y: {
+            formatter: function (val) {
+                return val + " units";
+            }
+        }
+    },
+    legend: {
+        show: false // Hides the legend
+    }
+});
+
+stockChart.render();
+
 
     // Sales by Category
     var salesByCategoryChart = new ApexCharts(document.querySelector("#salesByCategoryChart"), {
@@ -308,7 +452,11 @@
         }],
         xaxis: {
             categories: @json($salesByCategory->pluck('category_name'))
-        }
+        },
+        colors: ['#001a33'],
+        grid: {
+        show: false // Set to false to hide grid lines
+    }
     });
     salesByCategoryChart.render();
 </script>

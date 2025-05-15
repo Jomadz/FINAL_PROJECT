@@ -22,7 +22,7 @@
     
     <!-- ApexCharts -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css" crossorigin="anonymous" />
-
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <!-- Floating Icons CSS -->
     <style>
       .floating-icons {
@@ -84,6 +84,14 @@
           background-color: #3d3d3d; /* Darker Grey for hover */
           border-color: #3d3d3d; /* Darker Grey for hover */
       }
+      .kaushan-font {
+            font-family: 'Kaushan Script', cursive;
+        }
+      .pagination .page-link {
+    background-color: #0a1f44 !important;
+    border-color:rgb(249, 249, 249);
+}
+
     </style>
   </head>
   
@@ -118,13 +126,49 @@
           
 
         <div class="container">
-            <h1>Sales History</h1>
+            <h1 class=" display-4 fw-bold kaushan-font text-center animated-color mb-4">Sales History</h1>
 
             @if (session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
             @endif
+
+            <!-- Search Form -->
+<form method="GET" action="{{ route('sales.index') }}">
+  <div class="form-row mb-3 d-flex align-items-center">
+    <!-- Product Name Search -->
+    <div class="form-group col-md-2 ">
+      <label for="product_name">Product Name</label>
+      <input type="text" class="form-control" id="product_name" name="product_name" value="{{ request('product_name') }}">
+    </div> 
+
+    <!-- Seller Name Search -->
+    <div class="form-group col-md-2 ">
+      <label for="seller_name">Seller Name</label>
+      <select class="form-control" id="seller_name" name="seller_name">
+        <option value="">-- Select Seller --</option>
+        @foreach ($users as $user)
+          <option value="{{ $user->name }}" {{ request('seller_name') == $user->name ? 'selected' : '' }}>
+            {{ $user->name }}
+          </option>
+        @endforeach
+      </select>
+    </div><br>
+
+    <!-- Sale Time Search -->
+    <div class="form-group col-md-2   ">
+      <label for="sale_time">Sale Time</label>
+      <input type="date" class="form-control" id="sale_time" name="sale_time" value="{{ request('sale_time') }}">
+    </div></div>
+
+    <!-- Search Button -->
+    <div class="form-group col-md-4 d-flex align-items-end">
+      <label>&nbsp;</label>
+      <button type="submit" class="btn btn-primary btn-block">Search</button>
+    </div>
+  </div>
+</form>
 
             <table class="table table-striped">
                 <thead>
@@ -133,6 +177,7 @@
                         <th>Quantity</th>
                         <th>Total Price</th>
                         <th>Payment Method</th>
+                        <th>seller name </th>
                         <th>Sale Time</th>
                     </tr>
                 </thead>
@@ -143,6 +188,7 @@
                             <td>{{ $sale->quantity }}</td>
                             <td>{{ number_format($sale->total_price, 2) }} TSH</td>
                             <td>{{ $sale->payment_method }}</td>
+                            <td>{{ $sale->seller_name }}</td>
                             <td>{{ \Carbon\Carbon::parse($sale->sale_time)->format('Y-m-d H:i:s') }}</td>
 
                         </tr>

@@ -21,7 +21,7 @@
     
     <!-- ApexCharts -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css" crossorigin="anonymous" />
-
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <!-- Floating Icons CSS -->
     <style>
       .floating-icons {
@@ -83,6 +83,14 @@
           background-color: #3d3d3d; /* Darker Grey for hover */
           border-color: #3d3d3d; /* Darker Grey for hover */
       }
+      .kaushan-font {
+            font-family: 'Kaushan Script', cursive;
+        }
+      .pagination .page-link {
+    background-color: #0a1f44 !important;
+    border-color:rgb(249, 249, 249);
+}
+
     </style>
   </head>
   
@@ -111,7 +119,7 @@
    <!--This is the header session-->
    @include('admin.body.footer')
    <div class="container">
-    <h2 class="text-2xl font-bold mb-4">Purchases</h2>
+    <h2 class=" display-4 fw-bold kaushan-font text-center animated-color mb-4">Purchases</h2>
 
     {{-- Create button --}}
     <a href="{{ route('purchases.create') }}" class="btn btn-primary mb-3">
@@ -119,7 +127,7 @@
     </a>
 
 @if($purchases->count())
-<table class="table-auto w-full">
+<table class="table table-stripped">
     <thead class="bg-gray-200">
         <tr>
             <th class="p-2">Product</th>
@@ -142,7 +150,11 @@
 @else
         <p>No purchases recorded yet.</p>
     @endif
-</div>
+ <!-- Pagination Links -->
+ <div class="d-flex justify-content-center">
+        {{ $purchases->links('pagination::bootstrap-5') }}
+        </div>
+  </div>
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-dghWARbRe2eLlIJ56wNB+b760ywulqK3DzZYEpsg2fQ=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

@@ -13,6 +13,9 @@ use App\Http\Controllers\POSController;
 use App\Http\Controllers\SellerActivityController;
 use App\Http\Controllers\ProductOverviewController;
 use App\Http\Controllers\PurchasesController;
+use App\Http\Controllers\ExpenseController;
+
+Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
 
 
 Route::resource('purchases', PurchasesController::class);
@@ -27,8 +30,9 @@ Route::post('/pos/sale', [POSController::class, 'store'])->name('pos.store')->mi
 Route::get('/pos/category/{id}/products', [POSController::class, 'showProductsByCategory']);
 Route::post('/pos/store', [POSController::class, 'store']);
 Route::post('/pos/submit-sale', [PosController::class, 'store']);
-Route::get('/pos/receipt/multiple/{sale_ids}', [POSController::class, 'showMultipleReceipts'])->name('pos.multiple.receipt');
-Route::get('/pos/receipt/{id}', [PosController::class, 'showReceipt'])->name('pos.receipt');
+//Route::get('/pos/receipt/multiple/{sale_ids}', [POSController::class, 'showMultipleReceipts'])->name('pos.multiple.receipt');
+//Route::get('/pos/receipt/{id}', [PosController::class, 'showReceipt'])->name('pos.receipt');
+Route::get('pos/receipt/{sale_ids}', [PosController::class, 'receipt'])->name('pos.receipt');
 
 //sales routes
 Route::middleware(['auth'])->group(function () {
