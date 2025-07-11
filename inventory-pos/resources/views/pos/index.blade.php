@@ -13,7 +13,7 @@
 
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/styles/overlayscrollbars.min.css" crossorigin="anonymous" /> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta3/dist/css/adminlte.min.css" crossorigin="anonymous" />
     <!-- fonts only*/-->
@@ -87,6 +87,26 @@
         .product-card:hover, .product-card.active {
             background-color: #f0f0f0;
         }
+        .custom-header {
+  background-color: #001a33 ;
+}
+.custom-header .nav-link {
+  color: #fff;
+}
+.card-header {
+  background-color:rgb(0, 26, 51); /* Blue background */
+  color: #ffffff;            /* White text */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.25rem;        /* Slightly larger font */
+  font-weight: bold;         /* Bold text */
+  padding: 10px 16px;        /* Spacing around the text */
+  border-bottom: 2px rgb(0, 26, 51); /* Optional border */
+  border-radius: 8px 8px 0 0; /* Rounded top corners */
+}
+ 
+
+
+
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -94,13 +114,20 @@
 <body>
 @include('admin.body.header')
 <div class="app-wrapper">
+
     <div class="container-fluid mt-4">
     <h1 class="display-4 fw-bold disney-font text-center animated-color">Point of Sale </h1>
-            <div class="row">
-                <div class="col-md-8 mb-3 me-3">
-                    <div class="card">
+            <div class="row g-0">
+                <div class="col-md-8  pe-md-3">
+                    <div class="card h-100">
                         <div class="card-header">Cart</div>
                         <div class="card-body">
+                            
+    <!-- Barcode Scanner Input -->
+    <div class="mb-3">
+       <!-- <label for="pos-barcode" class="form-label">Scan Product Barcode:</label>-->
+        <input type="text" id="pos-barcode" class="form-control"  autocomplete="off"  style="position:absolute; opacity:0; left: -9999px;" />
+    </div>
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -124,8 +151,8 @@
                     </div><br>
                 </div>
                 
-                <div class="col-md-3 mb-3 me-3">
-                    <div class="card">
+                <div class="col-md-4  pe-md-3 ">
+                    <div class="card h-100">
                         <div class="card-header">Calculator</div>
                         <div class="card-body text-center">
                             <input type="text" id="calculator-input" class="form-control mb-2" readonly>
@@ -149,14 +176,18 @@
                     </div>
                 </div>
 
-                <div class="row">
-                <div class="col-md-4 mb-3 me-3">
-                    <div class="card">
+ <!-- Spacer Between Top and Bottom Rows -->
+ <div class="my-4"></div>
+
+
+                <div class="row g-0">
+                <div class="col-md-4 pe-md-3">
+                    <div class="card h-100">
                         <div class="card-header">Categories</div>
                         <div class="card-body">
                             <div class="row">
                                 @foreach($categories as $category)
-                                    <div class="col-md-3 mb-3">
+                                    <div class="col-md-6 mb-3">
                                         <div class="card category-card" onclick="fetchProducts({{ $category->id }})">
                                             <div class="card-body text-center">
                                                 <h5 class="card-title">{{ $category->name }}</h5>
@@ -168,9 +199,9 @@
                         </div>
                     </div>
                 </div>
-            
-            <div class="col-md-7 mb-3">
-    <div class="card">
+                
+            <div class="col-md-8 pe-md-3">
+    <div class="card h-100">
         <div class="card-header">Products</div>
         <div class="card-body">
             <div id="product-container" class="row">
@@ -193,9 +224,8 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label for="payment-method" class="form-label">Choose Payment Method</label>
-                    <select id="payment-method" class="form-select" required>
-                        <option value="">Select Payment Method</option>
-                        <option value="cash">Cash</option>
+                    <select id="payment-method" class="form-select" >
+                        <option value="cash" selected>Cash</option>
                         <option value="bank">Bank Transfer</option>
                         <option value="mobile money">Mobile Money</option>
                     </select>
@@ -204,14 +234,14 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary" onclick="submitSale()">Submit Sale</button>
-                <!-- Buttons -->
-    
             </div>
         </div>
     </div>
 </div>
-
 @include('admin.body.footer')
+
+
+
 
 <script>
     function fetchProducts(categoryId) {
@@ -272,32 +302,53 @@
         }
     }
 
-    function addToCart(product) {
-        console.log(product.product_id);
+  function addToCart(product) {
+    console.log(product.product_id);
 
-    const qty = 1; // Start with a default quantity of 1
+    const qty = 1;
     const discountPercent = product.discount || 0;
-    const price = product.price; // Use the correct price field
-    const discountValue = (discountPercent / 100) * price * qty;
-    const totalExclTax = (price * qty) - discountValue;
-    const totalInclTax = totalExclTax * (1 + (product.tax_rate || 0)); // Use tax_rate from the product
-    
+    const price = parseFloat(product.price);
+    const taxRate = (parseFloat(product.tax_rate) || 0) / 100; // Convert percent to decimal if stored as whole number
 
-    const cartItem = {
-        totalIncl: totalInclTax.toFixed(2), // Renamed from 'cl' to 'totalIncl'
-        taxRate: product.tax_rate || 0, // Ensure this is set correctly
-        product_id: product.product_id, // Ensure this is set correctly
-        name: product.name, // Use the correct product name field
-        price: price, // Include price in the cart item
-        discount: discountPercent,
-        qty: qty,
-        totalExcl: totalExclTax.toFixed(2),
-    };
+    // Check if product already in cart
+    const existingItemIndex = cart.findIndex(item => item.product_id === product.product_id);
 
-    cart.push(cartItem);
+    if (existingItemIndex !== -1) {
+        // Product exists – update quantity
+        const item = cart[existingItemIndex];
+        item.qty += qty;
+
+        // Recalculate totals
+        const discountValue = (item.discount / 100) * (item.price * item.qty);
+        const totalExclTax = (item.price * item.qty) - discountValue;
+        const totalInclTax = totalExclTax * (1 + taxRate);
+
+        item.totalExcl = totalExclTax.toFixed(2);
+        item.totalIncl = totalInclTax.toFixed(2);
+    } else {
+        // New product – add to cart
+        const discountValue = (discountPercent / 100) * price * qty;
+        const totalExclTax = (price * qty) - discountValue;
+        const totalInclTax = totalExclTax * (1 + taxRate);
+
+        const cartItem = {
+            product_id: product.product_id,
+            name: product.name,
+            price: price,
+            discount: discountPercent,
+            qty: qty,
+            taxRate: taxRate,
+            totalExcl: totalExclTax.toFixed(2),
+            totalIncl: totalInclTax.toFixed(2),
+        };
+
+        cart.push(cartItem);
+    }
+
     updateCart();
     clearInput();
 }
+
 
     function updateQuantity(index, newQty) {
         const item = cart[index];
@@ -362,10 +413,10 @@
                 <td>${item.name}</td>
                  <td>${item.product_id}</td>
                 <td>
-                    <input type="number" value="${item.discount}" min="0" max="100" step="0.01" onchange="updateDiscount(${index}, this.value)" />
+                    <input type="number" value="${item.discount}" min="0" max="100" step="0.25" onchange="updateDiscount(${index}, this.value)" />
                 </td>
                 <td>
-                    <input type="number" value="${item.qty}" min="0" step="0.01" onchange="updateQuantity(${index}, this.value)" />
+                    <input type="number" value="${item.qty}" min="0" step="0.25" onchange="updateQuantity(${index}, this.value)" />
                 </td>
                 <td>${item.totalExcl} TSH</td>
                 <td>${item.totalIncl} TSH</td>
@@ -395,7 +446,7 @@
 
 
     function submitSale() {
-        console.log('CSRF Token:', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+        //console.log('CSRF Token:', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
         console.log("Submit Sale button clicked");
 
         if (cart.length === 0) {
@@ -404,10 +455,10 @@
         }
 
         const paymentMethod = document.getElementById('payment-method').value;
-        if (!paymentMethod) {
-            alert('Please select a payment method.');
-            return;
-        }
+       // if (!paymentMethod) {
+        //    alert('Please select a payment method.');
+         //   return;
+        //}
 
         // Prepare data to send to the server
         const saleData = {
@@ -470,8 +521,117 @@ function printReceipt(response) {
 
    
 </script>
+
+ 
+<!-- <script>
+      window.onload = function() {
+        document.getElementById('pos-barcode').focus();
+    };
+    
+    document.getElementById('pos-barcode').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            let barcode = e.target.value.trim();
+
+            if (barcode === '') return;
+
+            fetch(`/pos/barcode/${barcode}`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Product not found');
+                    return res.json();
+                })
+                .then(product => {
+                    addToCart(product);
+                    document.getElementById('pos-barcode').value = '';
+                })
+                .catch(err => {
+                    alert(err.message);
+                    document.getElementById('pos-barcode').value = '';
+                    
+                });
+        }
+    });
+</script>
+
+
+Begins barcode scripts-->
+<script>
+    const barcodeInput = document.getElementById('pos-barcode');
+
+    function isAnyModalOpen() {
+        return document.querySelector('.modal.show') !== null;
+    }
+
+    // Check if user is editing a number input
+    function isTypingInCartInput() {
+        const active = document.activeElement;
+        return active.tagName === 'INPUT' && active.type === 'number';
+    }
+
+    // Focus barcode input only on page load if not editing
+    window.onload = () => {
+        if (!isAnyModalOpen() && !isTypingInCartInput()) {
+            barcodeInput.focus();
+        }
+    };
+
+    // Click anywhere else? Focus barcode input, unless editing cart
+    document.addEventListener('click', (e) => {
+        if (!isAnyModalOpen() && !isTypingInCartInput()) {
+            barcodeInput.focus();
+        }
+    });
+
+    // Keydown (scanner input) – don't steal focus if editing
+    document.addEventListener('keydown', (e) => {
+        if (!isAnyModalOpen() && !isTypingInCartInput()) {
+            barcodeInput.focus();
+        }
+    });
+
+    // Prevent losing barcode input focus unless user is editing
+    barcodeInput.addEventListener('blur', () => {
+        setTimeout(() => {
+            if (!isAnyModalOpen() && !isTypingInCartInput()) {
+                barcodeInput.focus();
+            }
+        }, 50); // slight delay to allow interaction
+    });
+
+    // Barcode scan handling
+    barcodeInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            const barcode = e.target.value.trim();
+            if (barcode === '') return;
+
+            fetch(`/pos/barcode/${barcode}`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Product not found');
+                    return res.json();
+                })
+                .then(product => {
+                    addToCart(product);
+                    barcodeInput.value = '';
+                })
+                .catch(err => {
+                    alert(err.message);
+                    barcodeInput.value = '';
+                })
+                .finally(() => {
+                    if (!isAnyModalOpen() && !isTypingInCartInput()) {
+                        barcodeInput.focus();
+                    }
+                });
+        }
+    });
+</script>
+
+
+
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
 
 
 </body>

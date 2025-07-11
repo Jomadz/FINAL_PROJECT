@@ -134,13 +134,19 @@
         .kaushan-font {
             font-family: 'Kaushan Script', cursive;
         }
+        .brand-text {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600  !important; /* You can adjust: 300 to 700 */
+    font-size: 18px;   /* Optional: tweak for logo size */
+    color: #ff6f61 !important;      /* Optional: update based on your branding */
+  }
     </style>
 </head>
 
 
     
 <body>
-    <div class="container mt-5">
+    <div class="container ">
     <h1 class="display-4 fw-bold kaushan-font text-center animated-color">Expenses </h1>
         
 

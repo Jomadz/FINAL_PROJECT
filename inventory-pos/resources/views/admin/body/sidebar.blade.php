@@ -1,11 +1,13 @@
     
-   <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
-        <div class="sidebar-brand">
-          <a href="./index.html" class="brand-link">
-            <img src="{{ asset('images/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image opacity-75 shadow" />
-            <span class="brand-text fw-light">Admin</span>
-          </a>
-        </div>
+  <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+    <div class="sidebar-brand">
+        <a href="{{ route('admin.dashboard') }}" class="brand-link">
+   
+             <span class="brand-text fw-light">DAILY SHOP</span>
+        </a>
+    </div>
+
+
         <div class="sidebar-wrapper">
           <nav class="mt-2">
             <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
@@ -28,22 +30,26 @@
                       <p>Manage Product</p>
                     </a>
                   </li>
+                  @if(auth()->user()->role === 'admin')
                   <li class="nav-item">
                     <a href="{{ route('product.overview') }}" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Product Overview</p>
                     </a>
                   </li>
+                  @endif
+    
                 </ul>
               </li>
-
+              @if(auth()->user()->role === 'admin')
                       <li class="nav-item">
                         <a href="{{ route('sales.index') }}" class="nav-link">
                           <i class="nav-icon bi bi-cart-check-fill"></i>
                           <p> Sales records</p>
                         </a>
                       </li>
-                     
+                      @endif
+                      
 
               <li class="nav-item">
                 <a href="{{ route('purchases.index') }}" class="nav-link">
@@ -89,7 +95,7 @@
               @endif
 
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('balance-sheet.index') }}" class="nav-link">
                   <i class="nav-icon bi bi-graph-up"></i>
                   <p>Balance_sheet</p>
                 </a>
@@ -105,7 +111,7 @@
 
       
 
-      <div class="floating-icons">
+     <!-- <div class="floating-icons">
         <a href="{{ route('pos.index') }}" class="icon">
           <i class="bi bi-cart"></i>
         </a>
@@ -133,4 +139,4 @@
           <i class="bi bi-bar-chart-line-fill"></i>
         </a>
        
-      </div>
+      </div>-->

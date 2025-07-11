@@ -87,6 +87,15 @@
     background-color: #0a1f44 !important;
     border-color:rgb(249, 249, 249) !important;
       }
+      .kaushan-font {
+            font-family: 'Kaushan Script', cursive;
+        }
+        .brand-text {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600  !important; /* You can adjust: 300 to 700 */
+    font-size: 18px;   /* Optional: tweak for logo size */
+    color: #ff6f61 !important;      /* Optional: update based on your branding */
+  }
     </style>
   </head>
   
@@ -100,7 +109,7 @@
       @include('admin.body.sidebar')
 
 <div class="container">
-    <h2 class="mb-4">Product Activities</h2>
+    <h2 class="display-4 fw-bold kaushan-font text-center animated-color">Product Activities</h2>
 
     <!-- Search Form -->
     <form method="GET" action="{{ route('admin.product-activities') }}">
@@ -128,7 +137,7 @@
 </form>
 
 
-    <table class="table table-bordered">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Seller</th>

@@ -92,18 +92,20 @@ class ProductController extends Controller
             'product_id' => $product->id, // Associate the product ID
         ]);
 
-        Purchase::create([
+       $purchase = Purchase::create([
             'product_id' => $product->id,
             'quantity'   => $data['stock_quantity'],
             'cost_price' => $data['cost_price'],
         ]);
 
-        Expense::create([
-            'product_id' => $purchase->product_id,
-            'amount' => $purchase->cost_price * $purchase->quantity, // expense based on price * quantity
-            'source' => 'purchase',        // Indicating this expense is related to a purchase
-            'user_id' => auth()->id(),     // Logged-in user
-        ]);
+      if (!is_null($product->cost_price) && !is_null($product->stock_quantity)) {
+    Expense::create([
+        'product_id' => $product->id,
+        'amount' => $product->cost_price * $product->stock_quantity, // Use values from product directly
+        'source' => 'product_creation', // Distinguish from 'purchase'
+        'user_id' => auth()->id(),
+    ]);
+}
 
         // Redirect back with a success message
         return redirect()->route('products.create')->with('success', 'Product added successfully!');

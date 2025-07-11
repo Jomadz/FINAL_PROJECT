@@ -1,5 +1,5 @@
  <!--begin::Header-->
- <nav class="app-header navbar navbar-expand bg-body">
+ <nav class="app-header navbar navbar-expand custom-header ">
         <!--begin::Container-->
         <div class="container-fluid">
           <!--begin::Start Navbar Links-->
@@ -21,12 +21,12 @@
           <!--end::Start Navbar Links-->
           <!--begin::End Navbar Links-->
           <ul class="navbar-nav ms-auto">
-            <!--begin::Navbar Search-->
+            <!--begin::Navbar Search
             <li class="nav-item">
               <a class="nav-link" data-widget="navbar-search" href="#" role="button">
                 <i class="bi bi-search"></i>
               </a>
-            </li>
+            </li>-->
             <!--end::Navbar Search-->
            
                
@@ -39,12 +39,7 @@
 
 
             <!--begin::Fullscreen Toggle-->
-            <li class="nav-item">
-              <a class="nav-link" href="#" data-lte-toggle="fullscreen">
-                <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
-                <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none"></i>
-              </a>
-            </li>
+            
             <!--end::Fullscreen Toggle-->
 
 

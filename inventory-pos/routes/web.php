@@ -13,7 +13,16 @@ use App\Http\Controllers\POSController;
 use App\Http\Controllers\SellerActivityController;
 use App\Http\Controllers\ProductOverviewController;
 use App\Http\Controllers\PurchasesController;
-use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\ExpenseController;use App\Http\Controllers\BalanceSheetController;
+
+
+Route::get('/test-footer', function () {
+    return view('test-footer');
+});
+
+
+Route::get('/balance-sheet', [BalanceSheetController::class, 'index'])->name('balance-sheet.index');
+
 
 Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
 
@@ -110,6 +119,16 @@ Route::get('/admin/activities/products', [SellerActivityController::class, 'prod
 Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::get('/seller/dashboard', [SellerController::class, 'dashboard'])->name('seller.dashboard');
 });
+
+Route::get('/api/products/barcode/{barcode}', function($barcode) {
+    $product = \App\Models\Product::where('barcode', $barcode)->first();
+    if ($product) {
+        return response()->json($product);
+    }
+    return response()->json(null, 404);
+});
+
+Route::get('/pos/barcode/{barcode}', [App\Http\Controllers\POSController::class, 'getProductByBarcode']);
 
 
 // Route to the welcome page (for non-authenticated users or as a home page)

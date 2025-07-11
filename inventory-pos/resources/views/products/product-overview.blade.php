@@ -22,6 +22,8 @@
     <!-- ApexCharts -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css" crossorigin="anonymous" />
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/layout.css') }}">
+
     <!-- Floating Icons CSS -->
     <style>
       .floating-icons {
@@ -86,8 +88,15 @@
       .kaushan-font {
             font-family: 'Kaushan Script', cursive;
         }
+        .brand-text {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600  !important; /* You can adjust: 300 to 700 */
+    font-size: 18px;   /* Optional: tweak for logo size */
+    color: #ff6f61 !important;      /* Optional: update based on your branding */
+  }
        
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   </head>
   
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
@@ -97,11 +106,13 @@
 @include('admin.body.header')
      
 
-      <!--This is the sidebar session-->
+    
+
+  <!--This is the footer session-->
+   @include('admin.body.footer')
+
+  <!--This is the sidebar session-->
   @include('admin.body.sidebar')
-
-
-
  
 @yield('admin')
 
@@ -112,27 +123,25 @@
 
     
 
-   <!--This is the header session-->
-   @include('admin.body.footer')
-
+ 
 
    <div class="app-content">
         <div class="container-fluid">
           @section('content')
 
    <div class="container mx-auto p-6">
-    <h1 class="display-4 fw-bold kaushan-font text-left animated-color"> Product Overview </h1>
+    <h1 class="display-4 fw-bold kaushan-font text-center animated-color"> Product Overview </h1>
     <form method="GET" action="{{ route('product.overview') }}" class="form-row mb-3 d-flex flex-wrap align-items-center">
         <!-- First Row with Inputs -->
-        <div class="flex-grow-1 mr-2 mb-2">
+        <div class="flex-grow-1 mr-2 mb-6">
             <label for="start_date" class="block font-medium">Start Date</label>
             <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" class="border p-2 rounded">
         </div>
-        <div class="flex-grow-1 mr-2 mb-2">
+        <div class="flex-grow-1 mr-2 mb-6">
             <label for="end_date" class="block font-medium">End Date</label>
             <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" class="border p-2 rounded">
         </div>
-        <div class="flex-grow-1 mr-2 mb-2">
+        <div class="flex-grow-1 mr-2 mb-6">
             <label for="category" class="block font-medium">Category</label>
             <select name="category" id="category" class="border p-2 rounded">
                 <option value="">All Categories</option>
@@ -150,92 +159,119 @@
 </div>
    
 
-    {{-- Top 3 Most Sold Products --}}
-    <div class="mb-16">
-        <h2 class="text-xl  kaushan-font text-right  mb-6">Top 3 Most Sold Products</h2>
-        <div id="topProductsChart"></div>
-    </div><br>
+{{-- Top & Least 3 Sold Products Side by Side --}}
+<div class="mb-16" style="padding: 20px;">
+<div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: space-between;">
+        <!-- Top 3 Most Sold Products -->
+        <div style="background-color: bg-gray-50; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 20px; flex: 1 1 45%; min-width: 300px;">
+            <h2 class="text-xl kaushan-font mb-3">Top 3 Most Sold Products</h2>
+            <div id="topProductsChart" style="width: 100%; height: 300px;"></div>
+        </div>
 
-    {{-- Least Sold Products (Pie) --}}
-    <div class="mb-10">
-        <h2 class="text-xl kaushan-font text-right mb-2">Least Sold Products</h2>
-        <div style="display: flex; justify-content: center; align-items: center; ">
-        <div id="leastProductsChart"  style="width: 600px; height: 300px;"></div>
-    </div><br>
-
-    {{-- Sales Trends Over Time --}}
-    <div class="mb-10">
-        <h2 class="text-xl  kaushan-font text-right mb-2">Sales Trends Over Time</h2>
-        <div id="salesTrendsChart"></div>
-    </div><br>
-
-    {{-- Stock Levels by Category --}}
-    <div class="mb-10">
-        <h2 class="text-xl  kaushan-font text-right mb-2">Stock Levels by Category</h2>
-        <div id="stockByCategoryChart"></div>
-        <div id="categoryLegend" style="margin-top: 10px;"></div>
-
-    </div><br>
-
-    {{-- Reorder Points Table --}}
-    <div class="mb-10">
-        <h2 class="text-xl  kaushan-font text-right mb-2">Reorder Points</h2>
-        <table class="w-full table-auto border">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="border p-2">Product</th>
-                    <th class="border p-2">Stock Level</th>
-                    <th class="border p-2">Reorder Point</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($reorderData as $product)
-                    <tr>
-                    <td class="border p-2">{{ $product->product_name }}</td>
-                     <td class="border p-2">{{ $product->stock_quantity}}</td>
-                     <td class="border p-2">{{ $product->minimum_stock_level}}</td>
-
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div><br>
-
-    {{-- Expiring Products Table --}}
-<div class="mb-10">
-    <h2 class="text-xl  kaushan-font text-right mb-2 text-red-600">⚠️ Products Expiring Within a Month</h2>
-    @if($expiringProducts->isEmpty())
-        <p class=" kaushan-font text-right text-gray-500">No products expiring within the next 30 days.</p>
-    @else
-        <table class="w-full table-auto border">
-            <thead>
-                <tr class="bg-red-100">
-                    <th class="border p-2">Product Name</th>
-                    <th class="border p-2">Category</th>
-                    <th class="border p-2">Expiry Date</th>
-                    <th class="border p-2">Stock</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($expiringProducts as $product)
-                    <tr class="bg-white">
-                        <td class="border p-2">{{ $product->product_name }}</td>
-                        <td class="border p-2">{{ $product->category->name }}</td>
-                        <td class="border p-2 text-red-500 font-semibold">{{ \Carbon\Carbon::parse($product->expiry_date)->format('Y-m-d') }}</td>
-                        <td class="border p-2">{{ $product->stock_quantity }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @endif
-</div><br>
-
-    {{-- Sales by Category --}}
-    <div class="mb-10">
-        <h2 class="text-xl  kaushan-font text-right mb-2">Sales by Category</h2>
-        <div id="salesByCategoryChart"></div>
+        <!-- Least 3 Sold Products -->
+        <div style="background-color: bg-gray-50; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 20px; flex: 1 1 45%; min-width: 300px;">
+            <h2 class="text-xl kaushan-font mb-3">Least Sold Products</h2>
+            <div id="leastProductsChart" style="width: 100%; height: 300px;"></div>
+        </div>
     </div>
 </div>
+
+{{-- Sales Trend Over Time and Sales by Category Side by Side --}}
+<div class="mb-16" style="padding: 20px;">
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: space-between;">
+        <!-- Sales Trend Over Time -->
+        <div style="background-color: bg-gray-50; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 20px; flex: 1 1 45%; min-width: 300px;">
+            <h2 class="text-xl kaushan-font mb-3">Sales Trend Over Time</h2>
+            <div id="salesTrendChart" style="height: 300px;"></div>
+        </div>
+
+        <!-- Sales by Category -->
+        <div style="background-color: bg-gray-50; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 20px; flex: 1 1 45%; min-width: 300px;">
+            <h2 class="text-xl kaushan-font mb-3">Sales by Category</h2>
+            <div id="categorySalesChart" style="height: 300px;"></div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- {{-- Stock Levels by Category --}}-->
+  
+<div style="
+    background-color:bg-gray-50;  /* light grey */
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 40px;  /* similar to mb-10 */
+    max-width: 100%;      /* full width or set a fixed width if you want */
+    ">
+    <h2 class="text-xl kaushan-font text-right mb-2">Stock Levels by Category</h2>
+    <div id="stockByCategoryChart" style="height: 300px;"></div>
+    <div id="categoryLegend" style="margin-top: 10px;"></div>
+</div><br>
+
+    @if($reorderData->isNotEmpty() || $expiringProducts->isNotEmpty())
+    <div class="flex flex-wrap justify-between gap-6 mb-10">
+        
+        {{-- Reorder Points Table --}}
+        @if($reorderData->isNotEmpty())
+            <div class="w-full md:w-[48%]">
+                <h6 class="text-xl kaushan-font text-right mb-1" style="font-weight: bold;">Reorder Points</h6>
+                <table class="w-full table-auto border">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border p-2">Product</th>
+                            <th class="border p-2">Stock Level</th>
+                            <th class="border p-2">Reorder Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($reorderData as $product)
+                            <tr>
+                                <td class="border p-2">{{ $product->product_name }}</td>
+                                <td class="border p-2">{{ $product->stock_quantity }}</td>
+                                <td class="border p-2">{{ $product->minimum_stock_level }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+
+        {{-- Expiring Products Table --}}
+        @if($expiringProducts->isNotEmpty())
+            <div class="w-full md:w-[48%]">
+                <h6 class="text-xl kaushan-font text-right mb-2 " style="font-weight: bold;">⚠️ Products Expiring Within a Month</h6>
+                <table class="w-full table-auto border">
+                    <thead>
+                        <tr class="bg-red-100">
+                            <th class="border p-2">Product Name</th>
+                            <th class="border p-2">Category</th>
+                            <th class="border p-2">Expiry Date</th>
+                            <th class="border p-2">Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($expiringProducts as $product)
+                            <tr class="bg-white">
+                                <td class="border p-2">{{ $product->product_name }}</td>
+                                <td class="border p-2">{{ $product->category->name }}</td>
+                                <td class="border p-2 text-red-500 font-semibold">
+                                    {{ \Carbon\Carbon::parse($product->expiry_date)->format('Y-m-d') }}
+                                </td>
+                                <td class="border p-2">{{ $product->stock_quantity }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+
+    </div>
+@endif
+
+       
+</div><br>
+ 
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
@@ -277,7 +313,7 @@
             }
         },
         legend: {
-            show: true // Hides the legend
+            show: false// Hides the legend
         },
         // Ensure the chart adjusts to different numbers of products
         noData: {
@@ -327,24 +363,39 @@ leastProductsChart.render();
 
 
     // Sales Trends Line Chart
-    var salesTrendsChart = new ApexCharts(document.querySelector("#salesTrendsChart"), {
-        chart: { type: 'line', 
-             height: 250, 
-        width: '50%'
-        },
-        series: [{
-            name: 'Sales',
-            data: @json($salesTrends->pluck('total_sales'))
-        }],
-        xaxis: {
-            categories: @json($salesTrends->pluck('date'))
-        },
-        colors: ['#001a33'],
-        grid: {
-        show: false // Set to false to hide background/grid lines
+var salesTrendsChart = new ApexCharts(document.querySelector("#salesTrendChart"), {
+    chart: { type: 'line', height: 250 },
+    series: [{
+        name: 'Sales',
+        data: @json($salesTrends->pluck('total_sales'))
+    }],
+    xaxis: {
+        categories: @json($salesTrends->pluck('date'))
+    },
+    colors: ['#001a33'],
+    grid: {
+        show: false
     }
-    });
-    salesTrendsChart.render();
+});
+salesTrendsChart.render();
+
+// Sales by Category
+var salesByCategoryChart = new ApexCharts(document.querySelector("#categorySalesChart"), {
+    chart: { type: 'bar', height: 250 },
+    series: [{
+        name: 'Sales',
+        data: @json($salesByCategory->pluck('total_sales'))
+    }],
+    xaxis: {
+        categories: @json($salesByCategory->pluck('category_name'))
+    },
+    colors: ['#001a33'],
+    grid: {
+        show: false
+    }
+});
+salesByCategoryChart.render();
+
 
     // Stock Levels by Category (Stacked Bar)
     var stockByCategoryData = @json($stockByCategory);
@@ -440,30 +491,12 @@ var stockChart = new ApexCharts(document.querySelector("#stockByCategoryChart"),
 stockChart.render();
 
 
-    // Sales by Category
-    var salesByCategoryChart = new ApexCharts(document.querySelector("#salesByCategoryChart"), {
-        chart: { type: 'bar',
-             height: 250, 
-        width: '50%'
-         },
-        series: [{
-            name: 'Sales',
-            data: @json($salesByCategory->pluck('total_sales'))
-        }],
-        xaxis: {
-            categories: @json($salesByCategory->pluck('category_name'))
-        },
-        colors: ['#001a33'],
-        grid: {
-        show: false // Set to false to hide grid lines
-    }
-    });
-    salesByCategoryChart.render();
+   
 </script>
 
 <!-- Scripts -->
 
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-dghWARbRe2eLlIJ56wNB+b760ywulqK3DzZYEpsg2fQ=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>

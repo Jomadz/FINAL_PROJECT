@@ -3,41 +3,49 @@
 <head>
     <title>Receipt</title>
     <style>
-        body { font-family: Arial, sans-serif;
+        body {
+            font-family: Arial, sans-serif;
             margin:  0;
             padding: 0;
             display: flex;
             justify-content: center;
-            background: #f4f4f4;}
-        
-            .receipt-container {
-            width: 80mm;
+            background: #f4f4f4;
+        }
+
+        .receipt-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
             background: white;
-            padding: 10px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .receipt-box {
+            width: 100%;
         }
 
         .header {
             text-align: center;
             font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 10px;
+            font-size: 28px;
+            margin-bottom: 20px;
         }
 
         .row {
-            margin-bottom: 5px;
-            font-size: 12px;
+            margin-bottom: 10px;
+            font-size: 18px;
         }
 
         table {
             width: 100%;
-            margin-top: 10px;
+            margin-top: 20px;
             border-collapse: collapse;
         }
 
         th, td {
-            padding: 4px 0;
-            font-size: 12px;
+            padding: 10px 0;
+            font-size: 16px;
             text-align: left;
         }
 
@@ -48,47 +56,49 @@
         .total {
             text-align: right;
             font-weight: bold;
-            font-size: 13px;
-            margin-top: 10px;
+            font-size: 20px;
+            margin-top: 20px;
         }
 
-        .buttons {
-            margin-top: 20px;
+        .btn-group {
+            margin-top: 30px;
             display: flex;
             flex-direction: column;
             gap: 10px;
             align-items: center;
         }
+
         table, th, td {
-        border: none;
-    }
-    @media print {
-        body * {
-            visibility: hidden;
-        }
-
-        .receipt-box, .receipt-box * {
-            visibility: visible;
-        }
-
-        .receipt-box {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
             border: none;
         }
 
-        .btn-group {
-            display: none;
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            .receipt-box, .receipt-box * {
+                visibility: visible;
+            }
+
+            .receipt-box {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                border: none;
+            }
+
+            .btn-group {
+                display: none;
+            }
         }
-    }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-    <div id="receipt-container">
+    <div id="receipt-container" class="receipt-container">
         <div class="receipt-box">
             <div class="header">Sales Receipt</div>
             <div class="row">Date: {{ \Carbon\Carbon::now()->format('Y-m-d H:i') }}</div>
@@ -119,47 +129,45 @@
             </table>
 
             <div class="total">Grand Total: {{ number_format($total, 2) }} TZS</div>
-        
-        <div class="total">Payment Method: {{ $sales->first()->payment_method ?? 'Unknown' }}</div>
-</div>
-    <div class="btn-group">
-        <button onclick="window.print()">🖨️ Print</button>
-        <button onclick="downloadPDF()">📄 Download PDF</button>
-        <a href="{{ route('pos.index') }}"><button>Back to POS</button></a>
+            <div class="total">Payment Method: {{ $sales->first()->payment_method ?? 'Unknown' }}</div>
+        </div>
+
+        <div class="btn-group">
+            <button onclick="window.print()">🖨️ Print</button>
+            <button onclick="downloadPDF()">📄 Download PDF</button>
+            <a href="{{ route('pos.index') }}"><button>Back to POS</button></a>
+        </div>
     </div>
-    </div>
-    
 
     <script>
-    async function downloadPDF() {
-        const { jsPDF } = window.jspdf;
-        const receipt = document.querySelector('.receipt-box');
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const receipt = document.querySelector('.receipt-box');
 
-        const canvas = await html2canvas(receipt, {
-            scale: 2,
-            useCORS: true,
-        });
+            const canvas = await html2canvas(receipt, {
+                scale: 2,
+                useCORS: true,
+            });
 
-        const imgData = canvas.toDataURL('image/png');
-        const imgProps = {
-            width: canvas.width,
-            height: canvas.height
-        };
+            const imgData = canvas.toDataURL('image/png');
+            const imgProps = {
+                width: canvas.width,
+                height: canvas.height
+            };
 
-        const pxPerMm = imgProps.width / receipt.offsetWidth;
-        const pdfWidth = 80; // mm (receipt width)
-        const pdfHeight = imgProps.height / pxPerMm;
+            const pxPerMm = imgProps.width / receipt.offsetWidth;
+            const pdfWidth = receipt.offsetWidth * 0.264583; // px to mm
+            const pdfHeight = imgProps.height / pxPerMm;
 
-        const pdf = new jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: [pdfWidth, pdfHeight]
-        });
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: [pdfWidth, pdfHeight]
+            });
 
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save('receipt.pdf');
-    }
-</script>
-
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save('receipt.pdf');
+        }
+    </script>
 </body>
 </html>
