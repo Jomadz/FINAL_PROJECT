@@ -53,4 +53,10 @@ class User extends Authenticatable
      {
          return $this->hasMany(Product::class, 'last_updated_by');
      }
+
+     public function sales()
+{
+    return $this->hasMany(Sale::class);
+}
+
 }

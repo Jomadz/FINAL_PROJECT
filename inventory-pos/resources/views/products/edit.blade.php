@@ -89,6 +89,12 @@
       .kaushan-font {
             font-family: 'Kaushan Script', cursive;
         }
+        .brand-text {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600  !important; /* You can adjust: 300 to 700 */
+    font-size: 18px;   /* Optional: tweak for logo size */
+    color: #ff6f61 !important;      /* Optional: update based on your branding */
+  }
     </style>
   </head>
   
@@ -127,7 +133,7 @@
           <div class="container">
    
 
-        <h1 class="display-4 fw-bold kaushan-font text-left animated-color">Edit Product</h1>
+        <h1 class="display-4 fw-bold kaushan-font text-center animated-color">Edit Product</h1>
         
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -180,7 +186,7 @@
                     </div>
                     <div class="form-group">
                         <label for="barcode">Barcode</label>
-                        <input type="text" class="form-control" id="barcode" name="barcode" value="{{ $product->barcode }}">
+                        <input type="text" class="form-control" id="barcode" name="barcode" autofocus  value="{{ $product->barcode }}">
                     </div>
                     <div class="form-group">
                         <label for="unit_of_measure">Unit of Measure</label>
@@ -239,7 +245,7 @@
                 </div>
             </div><br>
             <button type="submit" class="btn btn-primary mb-3">Save Changes</button>
-            <a href="{{ route('products.index') }}" class="btn btn-secondary mb-3">Back to Products</a>
+            <a href="{{ route('products.index') }}" class="btn btn-secondary mb-3 float-end">Back to Products</a>
         </form>
     
 

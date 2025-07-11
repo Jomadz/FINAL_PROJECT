@@ -61,6 +61,11 @@
   href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta3/dist/css/adminlte.min.css"
   crossorigin="anonymous"
 />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <!-- Floating Icons CSS -->
 <style>
@@ -101,9 +106,9 @@
       }
 
       .btn-primary {
-          background-color: #001f3f; /* Dark Navy for Add Product */
-          border-color: #001f3f; /* Dark Navy for Add Product */
-          color: white; /* White text for button */
+          background-color: #001f3f !important;; /* Dark Navy for Add Product */
+          border-color: #001f3f !important;; /* Dark Navy for Add Product */
+          color: white ; /* White text for button */
       }
 
       .btn-danger {
@@ -111,6 +116,22 @@
           border-color: #4b4b4b; /* Dark Grey for Delete */
           color: white; /* White text for delete button */
       }
+      .brand-text {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600  !important; /* You can adjust: 300 to 700 */
+    font-size: 18px;   /* Optional: tweak for logo size */
+    color: #ff6f61 !important;      /* Optional: update based on your branding */
+  }
+  .custom-header {
+  background-color: ; /* Replace with any color you want */
+}
+.custom-header .nav-link {
+  color:rgb(0, 0, 0); /* White text for contrast */
+}
+
+
+
+
     </style>
 
 
@@ -119,7 +140,7 @@
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
       <!--begin::Header-->
-      <nav class="app-header navbar navbar-expand bg-body">
+      <nav class="app-header navbar navbar-expand custom-header">
         <!--begin::Container-->
         <div class="container-fluid">
           <!--begin::Start Navbar Links-->
@@ -135,12 +156,12 @@
           <!--end::Start Navbar Links-->
           <!--begin::End Navbar Links-->
           <ul class="navbar-nav ms-auto">
-            <!--begin::Navbar Search-->
+            <!--begin::Navbar Search
             <li class="nav-item">
               <a class="nav-link" data-widget="navbar-search" href="#" role="button">
                 <i class="bi bi-search"></i>
               </a>
-            </li>
+            </li>-->
             <!--end::Navbar Search-->
            
                
@@ -153,12 +174,7 @@
 
 
             <!--begin::Fullscreen Toggle-->
-            <li class="nav-item">
-              <a class="nav-link" href="#" data-lte-toggle="fullscreen">
-                <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
-                <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none"></i>
-              </a>
-            </li>
+            
             <!--end::Fullscreen Toggle-->
 
 
@@ -228,21 +244,97 @@
       </nav>
       <!--end::Header-->
 
+       <!--begin::App Main-->
+<main class="app-main">
+  <!--begin::App Content Header-->
+  <div class="app-content-header">
+    <!--begin::Container-->
+    <div class="container-fluid">
+      <!--begin::Row-->
+      <div class="row">
+        <div class="col-sm-6"><h3 class="mb-0">Dashboard</h3></div>
+        <div class="col-sm-6">
+         <!--<ol class="breadcrumb float-sm-end">
+             <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+          </ol>-->
+        </div>
+      </div>
+      <!--end::Row-->
+    </div>
+    <!--end::Container-->
+  </div>
+
+  <!--begin::App Content-->
+  <div class="app-content">
+    <!--begin::Container-->
+    <div class="container-fluid">
+
+      <!-- User Sales Cards -->
+      @php
+  $colors = ['dark', 'warning', 'danger', 'success', 'info', 'primary'];
+@endphp
+
+      <div class="row mb-4 d-flex justify-content-center flex-wrap">
+        @foreach($usersSales as $index => $user)
+          <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card bg-{{ $colors[$index % count($colors)] }} text-white  text-center shadow-sm p-3">
+              <div class="card-body">
+              <div class="row">
+              <div class="col-12">
+                <h5 class="card-title">{{ $user->seller_name }}</h5>  </div>
+                </div>
+                <div class="row">
+                <div class="col-12">
+                <p class="card-text fs-4 fw-bold">
+                  Tsh {{ number_format($user->total_sales ?? 0, 0) }}
+                </p>   </div>
+                </div>
+                <div class="row">
+                <div class="col-12">
+                <small class="  text-white">Sales to date</small>   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        @endforeach
+      </div>
+
+      <!-- Revenue Line Chart -->
+      <div>
+      <div class="row">
+      <div class="col-md-6">
+        <h4 class="text-center">Revenue</h4>
+        <div id="revenueLineChart" style="max-width: 700px; margin-left: 0;"></div>
+      </div>
+      <div class="col-md-6">
+    <h5 class="text-center">Monthly Expenses</h5>
+    <div id="expensesBarChart"></div>
+  </div>
+</div>
+    </div>
+    <!--end::Container-->
+  </div>
+  <!--end::App Content-->
+
+</main>
+<!--end::App Main-->
+
+
+
+
       <!--begin::Sidebar-->
       <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
         <!--begin::Sidebar Brand-->
         <div class="sidebar-brand">
           <!--begin::Brand Link-->
-          <a href="./index.html" class="brand-link">
-            <!--begin::Brand Image-->
-            <img
-              src="{{ asset('images/AdminLTELogo.png')}}"
-              alt="AdminLTE Logo"
-              class="brand-image opacity-75 shadow"
-            />
+          <a href="{{ route('admin.dashboard') }}" class="brand-link">
+            <!--begin::Brand Image
+            <img src="{{ asset('images/custom-logo.png') }}" alt="WE LIVE" class="brand-image opacity-75 shadow" />-->
+
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">Admin </span>
+            <span class="brand-text fw-light">DAILY SHOP </span>
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
@@ -291,25 +383,30 @@
                               <p>Manage product</p>
                             </a>
                           </li>
+                      
+                          @auth
+                          @if(auth()->user()->role === 'admin')
                           <li class="nav-item">
                             <a href="{{ route('product.overview') }}" class="nav-link">
                               <i class="nav-icon bi bi-circle"></i>
                               <p>product overview</p>
                             </a>
                           </li>
+                          @endif
+                      @endauth
                         </ul>
                       </li>
-              
+                      
                       <!-- Sales -->
                      
-                  
+                      @if(auth()->user()->role === 'admin')
                       <li class="nav-item">
                         <a href="{{ route('sales.index') }}" class="nav-link">
                           <i class="nav-icon bi bi-cart-check-fill"></i>
                           <p> Sales records</p>
                         </a>
                       </li>
-                      
+                      @endif
 
                       <!-- Purchases -->
                       <li class="nav-item">
@@ -366,7 +463,7 @@
 
                       <!-- Revenue -->
                       <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('balance-sheet.index') }}" class="nav-link">
                           <i class="nav-icon bi bi-graph-up"></i>
                           <p>Balance_sheet</p>
                         </a>
@@ -380,37 +477,7 @@
                 </div>
                 <!--end::Sidebar Wrapper-->
               </aside>
-              <!-- Floating Icons -->
-<div class="floating-icons">
-    <a href="{{ route('pos.index') }}" class="icon">
-        <i class="bi bi-cart"></i>
-    </a>
-    <a href="{{ route('products.create') }}" class="icon">
-        <i class="bi bi-box-seam-fill"></i>
-    </a>
-    <a href="#" class="icon">
-        <i class="bi bi-cart-check-fill"></i>
-    </a>
-    <a href="#" class="icon">
-        <i class="bi bi-cart-plus-fill"></i>
-    </a>
-    <a href="#" class="icon">
-        <i class="bi bi-cash-coin"></i>
-    </a>
-    @if(auth()->user()->role === 'admin')
-    <a href="{{ route('admin.create-seller') }}" class="icon">
-        <i class="bi bi-people-fill"></i>
-    </a>
-    @endif
-    <a href="#" class="icon">
-        <i class="bi bi-graph-up"></i>
-    </a>
-    <a href="#" class="icon">
-        <i class="bi bi-bar-chart-line-fill"></i>
-    </a>
-    
-</div>
-
+          
               
                    
                 </ul>
@@ -432,54 +499,6 @@
 
 
 
-
-
-
-
-      <!--begin::App Main-->
-      <main class="app-main">
-        <!--begin::App Content Header-->
-        <div class="app-content-header">
-          <!--begin::Container-->
-          <div class="container-fluid">
-            <!--begin::Row-->
-            <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Dashboard</h3></div>
-              <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="#">Home</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Dashboard </li>
-                </ol>
-              </div>
-            </div>
-            <!--end::Row-->
-          </div>
-          <!--end::Container-->
-        </div>
-        <div class="app-content">
-          <!--begin::Container-->
-          <div class="container-fluid">
-            
-              <!-- /.col -->
-            </div>
-            <!--end::Row-->
-          </div>
-          <!--end::Container-->
-        </div>
-        <!--end::App Content-->
-      </main>
-      <!--end::App Main-->
-
-
-
-
-
-
-
-
-
-
-
       <!--begin::Footer-->
       <footer class="app-footer">
         <!--begin::To the end-->
@@ -487,7 +506,7 @@
         <!--end::To the end-->
         <!--begin::Copyright-->
         <strong>
-          Copyright &copy; 2024-2025&nbsp;
+          Copyright &copy; 2025&nbsp;
           <a href=" " class="text-decoration-none"></a>.
         </strong>
         All rights reserved.
@@ -498,6 +517,125 @@
     <!--end::App Wrapper-->
     <!--begin::Script-->
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
+   
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var options = {
+      chart: {
+        type: 'line',
+        height: 350,
+        toolbar: { show: false }
+      },
+      series: [{
+        name: 'Revenue (Tsh)',
+        data: @json($chartValues)
+      }],
+      colors: ['#001f3f'],
+      xaxis: {
+        categories: @json($chartLabels),
+        title: { text: 'Month' }
+      },
+      yaxis: {
+        title: { text: 'Revenue (Tsh)' },
+        labels: {
+          formatter: function (val) {
+            return val.toLocaleString();
+          }
+        }
+      },
+      stroke: {
+        curve: 'smooth'
+      },
+      markers: {
+        size: 5
+      },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return val.toLocaleString() + " Tsh";
+          }
+        }
+      }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#revenueLineChart"), options);
+    chart.render();
+
+     // Expenses Bar Chart
+     var expensesOptions = {
+      chart: {
+        type: 'bar',
+        height: 350,
+        toolbar: { show: false }
+      },
+      series: [{
+        name: 'Expenses (Tsh)',
+        data: @json($expenseValues)
+      }],
+      colors: ['#001f3f'],
+      xaxis: {
+        categories: @json($expenseLabels),
+        title: { text: 'Month' }
+      },
+      yaxis: {
+        title: { text: 'Expenses (Tsh)' },
+        labels: {
+          formatter: val => val.toLocaleString()
+        }
+      },
+      tooltip: {
+        y: {
+          formatter: val => val.toLocaleString() + " Tsh"
+        }
+      }
+    };
+
+    var expensesChart = new ApexCharts(document.querySelector("#expensesBarChart"), expensesOptions);
+    expensesChart.render();
+  });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    @if($lowStockProducts->count() || $expiringProducts->count())
+        let message = '';
+
+        @if($lowStockProducts->count())
+            message += `<div style="color: red; font-weight: bold; font-size: 24px; margin-bottom: 8px;">
+                            ⚠️ Low Stock
+                        </div>`;
+            message += `<div style="margin-bottom: 20px; color: #000; font-weight: bold; font-size: 18px;">
+                            {!! implode('<br>', $lowStockProducts->pluck('product_name')->toArray()) !!}
+                        </div>`;
+        @endif
+
+        @if($expiringProducts->count())
+            message += `<div style="color: red; font-weight: bold; font-size: 24px; margin-bottom: 8px;">
+                             ⏰Expiring Soon
+                        </div>`;
+            message += `<div style="color: #000; font-weight: bold; font-size: 18px;">
+                            {!! implode('<br>', $expiringProducts->pluck('product_name')->toArray()) !!}
+                        </div>`;
+        @endif
+
+        Swal.fire({
+            title: '<span style="font-size:30px; font-weight:bold;">Important Alerts</span>',
+            html: `<div>${message}</div>`,
+            confirmButtonText: 'OK',
+            background: '#fff3cd',
+            width: '350px',
+            customClass: {
+                confirmButton: 'btn btn-primary'
+            },
+            buttonsStyling: false
+        });
+    @endif
+});
+</script>
+
+
+
     <script
       src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js"
       integrity="sha256-dghWARbRe2eLlIJ56wNB+b760ywulqK3DzZYEpsg2fQ="

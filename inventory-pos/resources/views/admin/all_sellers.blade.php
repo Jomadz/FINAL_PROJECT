@@ -83,6 +83,15 @@
           background-color: #3d3d3d; /* Darker Grey for hover */
           border-color: #3d3d3d; /* Darker Grey for hover */
       }
+      .kaushan-font {
+            font-family: 'Kaushan Script', cursive;
+        }
+        .brand-text {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600  !important; /* You can adjust: 300 to 700 */
+    font-size: 18px;   /* Optional: tweak for logo size */
+    color: #ff6f61 !important;      /* Optional: update based on your branding */
+  }
     </style>
   </head>
   
@@ -98,7 +107,7 @@
 
 
 <div class="container mt-5">
-        <h2 class="mt-5">Existing Sellers</h2>
+        <h2 class="display-4 fw-bold kaushan-font text-center animated-color">Existing Sellers</h2>
         
        
 

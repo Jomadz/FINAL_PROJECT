@@ -12,7 +12,7 @@ class PurchasesController extends Controller
 {
     $purchases = Purchase::with('product')
     ->orderBy('created_at', 'desc')
-        ->paginate(20); 
+        ->paginate(15); 
     return view('purchases.index', compact('purchases'));
 }
 

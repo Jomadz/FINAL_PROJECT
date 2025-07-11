@@ -91,6 +91,15 @@
     background-color: #0a1f44 !important;
     border-color:rgb(249, 249, 249) !important;
 }
+.kaushan-font {
+            font-family: 'Kaushan Script', cursive;
+        }
+        .brand-text {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600  !important; /* You can adjust: 300 to 700 */
+    font-size: 18px;   /* Optional: tweak for logo size */
+    color: #ff6f61 !important;      /* Optional: update based on your branding */
+  }
     </style>
   </head>
   
@@ -104,7 +113,7 @@
       @include('admin.body.sidebar')
 
       <div class="container">
-        <h2 class="mb-4">Login & Logout Activities</h2>
+        <h2 class="display-4 fw-bold kaushan-font text-center animated-color">Login & Logout Activities</h2>
 
         <!-- Search Form -->
         <form method="GET" action="{{ route('admin.login-logout-activities') }}">
@@ -122,12 +131,12 @@
               <input type="date" class="form-control" id="date" name="date" value="{{ request('date') }}">
             </div>
             <div class="form-group col-md-4">
-              <label>&nbsp;</label>
+              <label>&nbsp;</label><br>
               <button type="submit" class="btn btn-primary btn-block">Search</button>
             </div>
           </div>
         </form>
-
+<br>
         <!-- Activities Table -->
         <table class="table table-striped">
           <thead>

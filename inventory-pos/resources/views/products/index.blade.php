@@ -139,6 +139,12 @@
     background-color: #0a1f44 !important;
     border-color:rgb(249, 249, 249) !important;
 }
+.brand-text {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600  !important; /* You can adjust: 300 to 700 */
+    font-size: 18px;   /* Optional: tweak for logo size */
+    color: #ff6f61 !important;      /* Optional: update based on your branding */
+  }
        
     </style>
 </head>

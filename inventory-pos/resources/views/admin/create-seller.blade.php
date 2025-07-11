@@ -86,6 +86,15 @@
           background-color: #3d3d3d; /* Darker Grey for hover */
           border-color: #3d3d3d; /* Darker Grey for hover */
       }
+      .kaushan-font {
+            font-family: 'Kaushan Script', cursive;
+        }
+        .brand-text {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600  !important; /* You can adjust: 300 to 700 */
+    font-size: 18px;   /* Optional: tweak for logo size */
+    color: #ff6f61 !important;      /* Optional: update based on your branding */
+  }
     </style>
   </head>
   
@@ -103,7 +112,7 @@
 
  
   <div class="container mt-5">
-        <h1>Create a New Seller</h1>
+        <h1 class="display-4 fw-bold kaushan-font text-center animated-color">Create a New Seller</h1>
 
         <form action="{{ route('admin.store-seller') }}" method="POST">
             @csrf
@@ -126,11 +135,11 @@
                 <label for="password_confirmation">Confirm Password</label>
                 <input type="password" name="password_confirmation" id="password_confirmation" required class="form-control">
             </div>
-
+<br>
             <div>
                 <button type="submit" class="btn btn-primary">Create Seller</button>
                 <a href="{{ route('admin.sellers') }}" class="btn btn-danger">Cancel</a>
-                <a href="{{ route('admin.all-sellers') }}" class="btn btn-secondary float-right">All sellers</a>
+                <a href="{{ route('admin.all-sellers') }}" class="btn btn-secondary float-end">All sellers</a>
             </div>
         </form>
 

@@ -123,129 +123,52 @@
 
   <div class="app-content">
         <div class="container-fluid">
-          @section('content')
-          
-          <div class="container">
 
-            <h1 class="display-4 fw-bold kaushan-font text-center animated-color">Add Product </h1>
-            @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+@section('content')
+<div class="container">
+    <h2 class="display-4 fw-bold kaushan-font text-center animated-color mb-4">Balance Sheet</h2>
+
+    <form method="GET" action="{{ route('balance-sheet.index') }}" class="mb-4">
+        <div class="row g-2">
+            <div class="col-md-4">
+                <label for="date">Filter by Date:</label>
+                <input type="date" name="date" id="date" value="{{ request('date') }}" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label for="month">Filter by Month:</label>
+                <input type="month" name="month" id="month" value="{{ request('month') }}" class="form-control">
+            </div>
+            <div class="col-md-4 align-self-end">
+                <button type="submit" class="btn btn-primary">Apply Filter</button>
+                <a href="{{ route('balance-sheet.index') }}" class="btn btn-secondary">Clear</a>
+            </div>
         </div>
-    @endif
-            <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="mb-5">
-              @csrf
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="product_name">Product Name</label>
-                    <input type="text" class="form-control" id="product_name" name="product_name" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="product_description">Product Description</label>
-                    <textarea class="form-control" id="product_description" name="product_description" rows="3"></textarea>
-                  </div>
-                  <div class="form-group">
-                    <label for="product_image">Product Image</label>
-                    <input type="file" class="form-control" id="product_image" name="product_image">
-                  </div>
-                  <br>
+    </form>
 
-                  <div>
-    <label for="category">Select Category</label>
-    <select name="product_category" id="category" class="form-control">
-        <option value="">-- Choose Category --</option>
-        @foreach($categories as $category)
-            <option value="{{ $category->id }}">{{ $category->name }}</option>
-        @endforeach
-    </select>
-
- 
-
-    <label for="new_category">Add New Category</label>
-    <input type="text" name="new_category" class="form-control" placeholder="Type new category">
-</div>
-
-<br>
-
-                  <div class="form-group">
-                    <label for="product_brand">Product Brand</label>
-                    <input type="text" class="form-control" id="product_brand" name="product_brand">
-                  </div>
-                  <div class="form-group">
-                    <label for="product_sku">Product SKU</label>
-                    <input type="text" class="form-control" id="product_sku" name="product_sku" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="barcode">Barcode</label>
-                    <input type="text" class="form-control" id="barcode" name="barcode"  autofocus>
-                  </div>
-                  <div class="form-group">
-                    <label for="unit_of_measure">Unit of Measure</label>
-                    <input type="text" class="form-control" id="unit_of_measure" name="unit_of_measure">
-                  </div>
-                </div>
-                <div class="col-md-6">
-    <div class="form-group">
-        <label for="stock_quantity">Stock Quantity</label>
-        <input type="number" class="form-control" id="stock_quantity" name="stock_quantity" value="0" min="0" required>
+    <div class="card p-4 mb-4">
+        <h4>Assets</h4>
+        <p>Inventory Value: <strong>{{ number_format($inventoryValue, 2) }} Tsh</strong></p>
+        <p>Total Sales: <strong>{{ number_format($totalSales, 2) }} Tsh</strong></p>
+        <hr>
+        <p><strong>Total Assets: {{ number_format($assets, 2) }} Tsh</strong></p>
     </div>
-    <div class="form-group">
-        <label for="minimum_stock_level">Minimum Stock Level</label>
-        <input type="number" class="form-control" id="minimum_stock_level" name="minimum_stock_level" value="0" min="0" required>
-    </div>
-    <div class="form-group">
-        <label for="reorder_quantity">Reorder Quantity</label>
-        <input type="number" class="form-control" id="reorder_quantity" name="reorder_quantity" value="0" min="0" required>
-    </div>
-    <div class="form-group">
-        <label for="cost_price">Cost Price</label>
-        <input type="number" step="0.01" class="form-control" id="cost_price" name="cost_price" min="0" required>
-    </div>
-    <div class="form-group">
-        <label for="selling_price">Selling Price</label>
-        <input type="number" step="0.01" class="form-control" id="selling_price" name="selling_price" min="0" required>
-    </div>
-    <div class="form-group">
-    <label for="expiry_date">Expiry Date</label>
-    <input type="date" class="form-control" id="expiry_date" name="expiry_date" value="" min="" required>
-</div>
 
-<script>
-    // Set the minimum date to today's date
-    document.getElementById('expiry_date').setAttribute('min', new Date().toISOString().split('T')[0]);
-</script>
-
-    <div class="form-group">
-        <label for="discount">Discount</label>
-        <input type="number" step="0.01" class="form-control" id="discount" name="discount" value="0" min="0" required>
+    <div class="card p-4 mb-4">
+        <h4>Liabilities</h4>
+        @if(Auth::user()->role === 'admin')
+        <p>Total Purchases: <strong>{{ number_format($totalPurchases, 2) }} Tsh</strong></p>
+        @endif
+        <p>Total Expenses: <strong>{{ number_format($totalExpenses, 2) }} Tsh</strong></p>
+        <hr>
+        <p><strong>Total Liabilities: {{ number_format($liabilities, 2) }} Tsh</strong></p>
     </div>
-    <div class="form-group">
-        <label for="tax_rate">Tax Rate (%)</label>
-        <input type="number" step="0.01" class="form-control" id="tax_rate" name="tax_rate" value="0" min="0" required>
+
+    <div class="card p-4">
+        <h4>Equity</h4>
+        <p><strong>{{ number_format($equity, 2) }} Tsh</strong></p>
     </div>
 </div>
-                  <div class="form-group">
-                    <label for="product_status">Product Status</label>
-                    <select class="form-control" id="product_status" name="product_status">
-                      <option value="active">Active</option>
-                      <option value="discontinued">Discontinued</option>
-                      <option value="out_of_stock">Out of Stock</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-primary mb-3">Add Product</button>
-              
-              <a href="{{ route('products.index') }}" class="btn btn-secondary mb-3 float-end">All Products</a>
-            </form>
 
-            
-          </div>
 
 
   <!-- Scripts -->

@@ -16,7 +16,23 @@ class POSController extends Controller
         $sale = Sale::findOrFail($id);
         return view('pos.receipt', compact('sale'));
     }
-
+    public function getProductByBarcode($barcode)
+    {
+        $product = Product::where('barcode', $barcode)->first();
+    
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+    
+        return response()->json([
+            'product_id' => $product->id,
+            'name' => $product->product_name,
+            'price' => $product->selling_price,
+            'discount' => $product->discount ?? 0,
+            'tax_rate' => $product->tax_rate ?? 0,
+        ]);
+    }
+    
     public function index()
     {
         $categories = Category::all();
